@@ -15,7 +15,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace GraphicalCalculatorNEA
 {
-    ////Roots display
+    //Roots display
     public partial class Graph : Form
     {
         PointF[] CartPoints = new PointF[5000];
