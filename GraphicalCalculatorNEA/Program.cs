@@ -80,11 +80,11 @@ namespace GraphicalCalculatorNEA
             {
                 input = "0" + input;
             }
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 1; i < input.Length; i++)
             {
-                if (input[i] == '-' && input[i+1] == '-')
+                if (input[i - 1] == '-' && input[i] == '-')
                 {
-                    input = input.Substring(0, i) + "+" + input.Substring(i + 2);
+                    input = input.Substring(0, i - 1) + "+" + input.Substring(i + 1);
                 }
             }
             return input;
@@ -106,7 +106,8 @@ namespace GraphicalCalculatorNEA
             }
             if (LCount != RCount)
             {
-                Console.WriteLine("ERROR: Bracket pair missing.");
+                currtok.value = "ERROR: Bracket pair missing.";
+                currtok.type = TokenType.Error;
                 currchar = '!';
             }
         }
@@ -122,7 +123,14 @@ namespace GraphicalCalculatorNEA
                 currchar = input[pos];
             }
         }
-
+        private void CheckEnd()
+        {
+            if (pos + 1 == input.Length)
+            {
+                currtok.type = TokenType.Error;
+                currtok.value = "ERROR: Expression unrecognised.";
+            }
+        }
         public Token GetNextToken()
         {
             while (currchar != '!')
@@ -140,6 +148,7 @@ namespace GraphicalCalculatorNEA
                 else if (currchar == '(')
                 {
                     currtok = new Token(TokenType.LParen, "(");
+                    CheckEnd();
                 }
                 else if (currchar == ')')
                 {
@@ -148,14 +157,17 @@ namespace GraphicalCalculatorNEA
                 else if (currchar == '^')
                 {
                     currtok = new Token(TokenType.Exp, "^");
+                    CheckEnd();
                 }
                 else if (currchar == '*' || currchar == '/')
                 {
                     currtok = new Token(TokenType.Operator1, currchar.ToString());
+                    CheckEnd();
                 }
                 else if (currchar == '+' || currchar == '-')
                 {
                     currtok = new Token(TokenType.Operator2, currchar.ToString());
+                    CheckEnd();
                 }
                 else if (currchar == ';')
                 {
@@ -185,7 +197,10 @@ namespace GraphicalCalculatorNEA
                 }
                 if (currtok.type == TokenType.Error)
                 {
-                    currtok.value = "ERROR: " + currtok.value + " not recognised.";
+                    if (currtok.value != "ERROR: Expression unrecognised.")
+                    {
+                        currtok.value = "ERROR: " + currtok.value + " not recognised.";
+                    }
                 }
                 return currtok;
             }
@@ -268,6 +283,7 @@ namespace GraphicalCalculatorNEA
         Node node = new Node(null, null, null);
         Token currtok;
         Lexer lexer;
+        bool error = false;
         public Parser(string input)
         {
             lexer = new Lexer(input);
@@ -299,7 +315,14 @@ namespace GraphicalCalculatorNEA
                 Node temp = new Node(node, null, currtok.value);
                 Consume();
                 temp.right = Term();
-                node = temp;
+                if (error == true)
+                {
+                    node = temp.right;
+                }
+                else
+                {
+                    node = temp;
+                }
             }
             return node;
         }
@@ -308,12 +331,19 @@ namespace GraphicalCalculatorNEA
         {
             Node node = Factor();
 
-            if (currtok.type == TokenType.Operator1)
+            while (currtok.type == TokenType.Operator1)
             {
                 Node temp = new Node(node, null, currtok.value);
                 Consume();
                 temp.right = Factor();
-                node = temp;
+                if (error == true)
+                {
+                    node = temp.right;
+                }
+                else
+                {
+                    node = temp;
+                }
             }
             return node;
         }
@@ -321,7 +351,7 @@ namespace GraphicalCalculatorNEA
         private Node Factor()
         {
             while (currtok.type == TokenType.Num || currtok.type == TokenType.Var || currtok.type == TokenType.Trig || currtok.type == TokenType.Log
-                || currtok.type == TokenType.Exp || currtok.type == TokenType.Const || currtok.type == TokenType.LParen)
+                || currtok.type == TokenType.Exp || currtok.type == TokenType.Const || currtok.type == TokenType.LParen || currtok.type == TokenType.Error)
             {
 
                 if (currtok.type == TokenType.Num || currtok.type == TokenType.Var || currtok.type == TokenType.Const)
@@ -335,6 +365,14 @@ namespace GraphicalCalculatorNEA
                     Consume();
                     CheckBracket();
                     temp.right = Factor();
+                    if (error == true)
+                    {
+                        node = temp.right;
+                    }
+                    else
+                    {
+                        node = temp;
+                    }
                     node = temp;
                 }
                 if (currtok.type == TokenType.Log)
@@ -343,6 +381,14 @@ namespace GraphicalCalculatorNEA
                     Consume();
                     CheckBracket();
                     temp.right = Factor();
+                    if (error == true)
+                    {
+                        node = temp.right;
+                    }
+                    else
+                    {
+                        node = temp;
+                    }
                     node = temp;
                 }
                 if (currtok.type == TokenType.Exp)
@@ -351,7 +397,14 @@ namespace GraphicalCalculatorNEA
                     Consume();
                     CheckBracket();
                     temp.right = Factor();
-                    node = temp;
+                    if (error == true)
+                    {
+                        node = temp.right;
+                    }
+                    else
+                    {
+                        node = temp;
+                    }
                 }
                 if (currtok.type == TokenType.LParen)
                 {
@@ -359,24 +412,21 @@ namespace GraphicalCalculatorNEA
                     node = Expression();
                     Consume();
                 }
+                if (currtok.type == TokenType.Error)
+                {
+                    node = new Node(null, null, currtok.value);
+                    error = true;
+                    currtok.type = TokenType.End;
+                }
             } 
             return node;
         }
-        public void Traverse(Node node)
-        {
-            if (node.right != null)
-            {
-                Traverse(node.right);
-            }
-            if (node.left != null)
-            {
-                Traverse(node.left);
-            }
-            Console.WriteLine(node.value);
-        }
-
         public Node Evaluate(Node node, string x)
         {
+            if (error == true)
+            {
+                return node;
+            }
             if (node.left == null && node.right == null)
             {
                 if (node.value == "x")

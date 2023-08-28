@@ -15,7 +15,6 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace GraphicalCalculatorNEA
 {
-    //ERROR HANDLING!!!!!!!!!!!!!!
     ////Roots display
     public partial class Graph : Form
     {
@@ -34,6 +33,7 @@ namespace GraphicalCalculatorNEA
         Graphics graphObj;
         Parser parser;
         string cursor = "default";
+        bool error = false;
         public Graph()
         {
             InitializeComponent();
@@ -95,7 +95,21 @@ namespace GraphicalCalculatorNEA
             for (int i = 0; i < PixPoints.Length; i++)
             {
                 parser = new Parser(function);
-                CartPoints[i].Y = float.Parse(parser.Evaluate(parser.root, Convert.ToString(CartPoints[i].X)).value);
+                try
+                {
+                    CartPoints[i].Y = float.Parse(parser.Evaluate(parser.root, Convert.ToString(CartPoints[i].X)).value);
+                }
+                catch
+                {
+                    MessageBox.Show(parser.Evaluate(parser.root, Convert.ToString(CartPoints[i].X)).value);
+                    slctFunc1.Checked = false;
+                    slctFunc2.Checked = false;
+                    slctFunc3.Checked = false;
+                    slctFunc4.Checked = false;
+                    slctFunc5.Checked = false;
+                    error = true;
+                    break;
+                }
                 PixPoints[i].Y = CartToPix(CartPoints[i].X, CartPoints[i].Y).Y;
                 PixPoints[i].X = CartToPix(CartPoints[i].X, CartPoints[i].Y).X;
             }
@@ -348,27 +362,30 @@ namespace GraphicalCalculatorNEA
         {
             ReadSettings();
             GetPointArray(function);
-            DrawGrid();
-            try
+            if (error != true)
             {
-                for (int i = 0; i < PixPoints.Length - 1; i++)
+                DrawGrid();
+                try
                 {
-                    if (Double.IsNaN(PixPoints[i].Y) != true && Double.IsNaN(PixPoints[i + 1].Y) != true)
+                    for (int i = 0; i < PixPoints.Length - 1; i++)
                     {
-                        try
+                        if (Double.IsNaN(PixPoints[i].Y) != true && Double.IsNaN(PixPoints[i + 1].Y) != true)
                         {
-                            graphObj.DrawLine(pen, PixPoints[i], PixPoints[i + 1]);
-                        }
-                        catch
-                        { 
+                            try
+                            {
+                                graphObj.DrawLine(pen, PixPoints[i], PixPoints[i + 1]);
+                            }
+                            catch
+                            {
 
+                            }
                         }
                     }
                 }
-            }
-            catch (OverflowException)
-            {
+                catch (OverflowException)
+                {
 
+                }
             }
         }
         private string GetYIntercept(string function)
@@ -384,9 +401,16 @@ namespace GraphicalCalculatorNEA
         }
         private void DisplayInfo(ListBox lb, string function)
         {
-            lb.Items.Clear();
-            lb.Items.Add("Y-Intercept: " + GetYIntercept(function));
-            lb.Items.Add("Roots: " + GetRoots(function));
+            if (error != true)
+            {
+                lb.Items.Clear();
+                lb.Items.Add("Y-Intercept: " + GetYIntercept(function));
+                lb.Items.Add("Roots: " + GetRoots(function));
+            }
+            else
+            {
+                lb.Items.Clear();
+            }
         }
         private void Zoom(float x, float y, float multiplier)
         {
@@ -405,6 +429,7 @@ namespace GraphicalCalculatorNEA
         }
         public void FuncCheck()
         {
+            error = false;
             graphObj = pbGraph.CreateGraphics();
             graphObj.Clear(Color.White);
             if (slctFunc1.Checked)
