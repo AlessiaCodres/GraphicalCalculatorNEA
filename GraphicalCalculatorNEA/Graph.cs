@@ -15,7 +15,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace GraphicalCalculatorNEA
 {
-    //Roots display
+    //Roots calculation - do a sign change method for greater reliability 
     public partial class Graph : Form
     {
         PointF[] CartPoints = new PointF[5000];
@@ -97,7 +97,8 @@ namespace GraphicalCalculatorNEA
                 parser = new Parser(function);
                 try
                 {
-                    CartPoints[i].Y = float.Parse(parser.Evaluate(parser.root, Convert.ToString(CartPoints[i].X)).value);
+                    double y = Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(CartPoints[i].X)).value), 3);
+                    CartPoints[i].Y = (float)y;
                 }
                 catch
                 {
@@ -369,7 +370,7 @@ namespace GraphicalCalculatorNEA
                 {
                     for (int i = 0; i < PixPoints.Length - 1; i++)
                     {
-                        if (Double.IsNaN(PixPoints[i].Y) != true && Double.IsNaN(PixPoints[i + 1].Y) != true)
+                        if (double.IsNaN(PixPoints[i].Y) != true && double.IsNaN(PixPoints[i + 1].Y) != true)
                         {
                             try
                             {
@@ -394,36 +395,72 @@ namespace GraphicalCalculatorNEA
             string yintercept = parser.Evaluate(parser.root, Convert.ToString(0)).value;
             return yintercept;
         }
-        private string GetRoots(string function)
+        
+        private List<string> GetRoots()
         {
-            string roots = "";
+            List<string> roots = new List<string>();
+            float range = (MaxX - MinX)/5000;
+            for (int i = 0; i < CartPoints.Length; i++)
+            {
+                if (CartPoints[i].Y >= -range && CartPoints[i].Y <= range)
+                {
+                    string root = "x = " + Convert.ToString(Math.Round(CartPoints[i].X, 1));
+                    if (roots.Contains(root) == false)
+                    {
+                        roots.Add(root);
+                    }
+                }
+            }
             return roots;
         }
         private void DisplayInfo(ListBox lb, string function)
         {
+            lb.Items.Clear();
             if (error != true)
             {
-                lb.Items.Clear();
                 lb.Items.Add("Y-Intercept: " + GetYIntercept(function));
-                lb.Items.Add("Roots: " + GetRoots(function));
-            }
-            else
-            {
-                lb.Items.Clear();
+                List<string> roots = GetRoots();
+                if (roots.Count > 20)
+                {
+                    lb.Items.Add("There are too many roots to display.");
+                }
+                else
+                {
+                    for (int i = 0; i < roots.Count; i++)
+                    {
+                        lb.Items.Add(roots[i]);
+                    }
+                }
             }
         }
         private void Zoom(float x, float y, float multiplier)
         {
+            float[] settings = new float[4];
             float xdiff = MaxX - MinX;
             float ydiff = MaxY - MinY;
             xdiff = xdiff * multiplier;
             ydiff = ydiff * multiplier;
             x = PixToCart(x, y).X;
             y = PixToCart(x, y).Y;
-            MinX = x - (xdiff / 2);
-            MaxX = x + (xdiff / 2);
-            MinY = y - (ydiff / 2);
-            MaxY = y + (ydiff / 2);
+            settings[0] = x - (xdiff / 2);
+            settings[1] = x + (xdiff / 2);
+            settings[2] = y - (ydiff / 2);
+            settings[3] = y + (ydiff / 2);
+            for (int i = 0; i < 4; i++)
+            {
+                if (settings[i] > 300)
+                {
+                    settings[i] = 300;
+                }
+                if (settings[i] < -300)
+                {
+                    settings[i] = -300;
+                }
+            }
+            MinX = settings[0];
+            MaxX = settings[1];
+            MinY = settings[2];
+            MaxY = settings[3];
             WriteSettings();
             FuncCheck();
         }
@@ -442,25 +479,25 @@ namespace GraphicalCalculatorNEA
             {
                 Pen pen = new Pen(Func2Colour.BackColor);
                 DrawGraph(pen, txtFunc2.Text);
-                DisplayInfo(lbFunc2Info, txtFunc1.Text);
+                DisplayInfo(lbFunc2Info, txtFunc2.Text);
             }
             if (slctFunc3.Checked)
             {
                 Pen pen = new Pen(Func3Colour.BackColor);
                 DrawGraph(pen, txtFunc3.Text);
-                DisplayInfo(lbFunc3Info, txtFunc1.Text);
+                DisplayInfo(lbFunc3Info, txtFunc3.Text);
             }
             if (slctFunc4.Checked)
             {
                 Pen pen = new Pen(Func4Colour.BackColor);
                 DrawGraph(pen, txtFunc4.Text);
-                DisplayInfo(lbFunc4Info, txtFunc1.Text);
+                DisplayInfo(lbFunc4Info, txtFunc4.Text);
             }
             if (slctFunc5.Checked)
             {
                 Pen pen = new Pen(Func5Colour.BackColor);
                 DrawGraph(pen, txtFunc5.Text);
-                DisplayInfo(lbFunc5Info, txtFunc1.Text);
+                DisplayInfo(lbFunc5Info, txtFunc5.Text);
             }
         }
         private void Graph_Load(object sender, EventArgs e)

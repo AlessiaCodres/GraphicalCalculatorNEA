@@ -44,6 +44,12 @@ namespace GraphicalCalculatorNEA
                     lbInvalid.Text = "Invalid: Minimum cannot be >= maximum.";
                     valid = false;
                 }
+                if (Convert.ToDouble(tbxMinX.Text) <= -300 || Convert.ToDouble(tbxMinY.Text) <= -300 || 
+                    Convert.ToDouble(tbxMaxX.Text) >= 300 || Convert.ToDouble(tbxMaxY.Text) >= 300)
+                {
+                    lbInvalid.Text = "Invalid: Must be in the range -300 <= Settings <= 300.";
+                    valid = false;
+                }
                 else
                 {
                     lbInvalid.Text = null;
