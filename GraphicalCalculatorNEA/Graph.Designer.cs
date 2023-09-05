@@ -29,532 +29,532 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Graph));
-            this.label1 = new System.Windows.Forms.Label();
-            this.btSettingsG = new System.Windows.Forms.Button();
-            this.btHelpG = new System.Windows.Forms.Button();
-            this.slctFunc4 = new System.Windows.Forms.CheckBox();
-            this.txtFunc5 = new System.Windows.Forms.TextBox();
-            this.txtFunc4 = new System.Windows.Forms.TextBox();
-            this.txtFunc3 = new System.Windows.Forms.TextBox();
-            this.lby2 = new System.Windows.Forms.Label();
-            this.lby1 = new System.Windows.Forms.Label();
-            this.lby3 = new System.Windows.Forms.Label();
-            this.lby4 = new System.Windows.Forms.Label();
-            this.lby5 = new System.Windows.Forms.Label();
-            this.slctFunc3 = new System.Windows.Forms.CheckBox();
-            this.slctFunc2 = new System.Windows.Forms.CheckBox();
-            this.slctFunc1 = new System.Windows.Forms.CheckBox();
-            this.slctFunc5 = new System.Windows.Forms.CheckBox();
-            this.txtFunc2 = new System.Windows.Forms.TextBox();
-            this.txtFunc1 = new System.Windows.Forms.TextBox();
-            this.btExitG = new System.Windows.Forms.Button();
-            this.pbGraph = new System.Windows.Forms.PictureBox();
-            this.pbZoomIn = new System.Windows.Forms.PictureBox();
-            this.pbZoomOut = new System.Windows.Forms.PictureBox();
-            this.pbLeft = new System.Windows.Forms.PictureBox();
-            this.pbDown = new System.Windows.Forms.PictureBox();
-            this.pbUp = new System.Windows.Forms.PictureBox();
-            this.pbRight = new System.Windows.Forms.PictureBox();
-            this.Func1Colour = new System.Windows.Forms.Button();
-            this.Func5Colour = new System.Windows.Forms.Button();
-            this.Func4Colour = new System.Windows.Forms.Button();
-            this.Func3Colour = new System.Windows.Forms.Button();
-            this.Func2Colour = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.pbCursor = new System.Windows.Forms.PictureBox();
-            this.lbFunc1Info = new System.Windows.Forms.ListBox();
-            this.lbFunc2Info = new System.Windows.Forms.ListBox();
-            this.lbFunc3Info = new System.Windows.Forms.ListBox();
-            this.lbFunc4Info = new System.Windows.Forms.ListBox();
-            this.lbFunc5Info = new System.Windows.Forms.ListBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pbGraph)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZoomIn)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZoomOut)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDown)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbUp)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbRight)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCursor)).BeginInit();
-            this.SuspendLayout();
+            label1 = new Label();
+            btSettingsG = new Button();
+            btHelpG = new Button();
+            slctFunc4 = new CheckBox();
+            txtFunc5 = new TextBox();
+            txtFunc4 = new TextBox();
+            txtFunc3 = new TextBox();
+            lby2 = new Label();
+            lby1 = new Label();
+            lby3 = new Label();
+            lby4 = new Label();
+            lby5 = new Label();
+            slctFunc3 = new CheckBox();
+            slctFunc2 = new CheckBox();
+            slctFunc1 = new CheckBox();
+            slctFunc5 = new CheckBox();
+            txtFunc2 = new TextBox();
+            txtFunc1 = new TextBox();
+            btExitG = new Button();
+            pbGraph = new PictureBox();
+            pbZoomIn = new PictureBox();
+            pbZoomOut = new PictureBox();
+            pbLeft = new PictureBox();
+            pbDown = new PictureBox();
+            pbUp = new PictureBox();
+            pbRight = new PictureBox();
+            Func1Colour = new Button();
+            Func5Colour = new Button();
+            Func4Colour = new Button();
+            Func3Colour = new Button();
+            Func2Colour = new Button();
+            label2 = new Label();
+            label3 = new Label();
+            label4 = new Label();
+            label5 = new Label();
+            label6 = new Label();
+            colorDialog1 = new ColorDialog();
+            pbCursor = new PictureBox();
+            lbFunc1Info = new ListBox();
+            lbFunc2Info = new ListBox();
+            lbFunc3Info = new ListBox();
+            lbFunc4Info = new ListBox();
+            lbFunc5Info = new ListBox();
+            ((System.ComponentModel.ISupportInitialize)pbGraph).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbZoomIn).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbZoomOut).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbLeft).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbDown).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbUp).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbRight).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pbCursor).BeginInit();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Segoe UI", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.label1.Location = new System.Drawing.Point(16, 9);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(128, 37);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Graphing";
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 20.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(16, 9);
+            label1.Name = "label1";
+            label1.Size = new Size(128, 37);
+            label1.TabIndex = 0;
+            label1.Text = "Graphing";
             // 
             // btSettingsG
             // 
-            this.btSettingsG.Location = new System.Drawing.Point(729, 9);
-            this.btSettingsG.Name = "btSettingsG";
-            this.btSettingsG.Size = new System.Drawing.Size(95, 43);
-            this.btSettingsG.TabIndex = 4;
-            this.btSettingsG.Text = "Settings";
-            this.btSettingsG.UseVisualStyleBackColor = true;
-            this.btSettingsG.Click += new System.EventHandler(this.btSettingsG_Click);
+            btSettingsG.Location = new Point(729, 9);
+            btSettingsG.Name = "btSettingsG";
+            btSettingsG.Size = new Size(95, 43);
+            btSettingsG.TabIndex = 4;
+            btSettingsG.Text = "Settings";
+            btSettingsG.UseVisualStyleBackColor = true;
+            btSettingsG.Click += btSettingsG_Click;
             // 
             // btHelpG
             // 
-            this.btHelpG.Location = new System.Drawing.Point(830, 8);
-            this.btHelpG.Name = "btHelpG";
-            this.btHelpG.Size = new System.Drawing.Size(95, 44);
-            this.btHelpG.TabIndex = 5;
-            this.btHelpG.Text = "Help";
-            this.btHelpG.UseVisualStyleBackColor = true;
-            this.btHelpG.Click += new System.EventHandler(this.btHelpG_Click);
+            btHelpG.Location = new Point(830, 8);
+            btHelpG.Name = "btHelpG";
+            btHelpG.Size = new Size(95, 44);
+            btHelpG.TabIndex = 5;
+            btHelpG.Text = "Help";
+            btHelpG.UseVisualStyleBackColor = true;
+            btHelpG.Click += btHelpG_Click;
             // 
             // slctFunc4
             // 
-            this.slctFunc4.AutoSize = true;
-            this.slctFunc4.Location = new System.Drawing.Point(211, 430);
-            this.slctFunc4.Name = "slctFunc4";
-            this.slctFunc4.Size = new System.Drawing.Size(15, 14);
-            this.slctFunc4.TabIndex = 40;
-            this.slctFunc4.UseVisualStyleBackColor = true;
-            this.slctFunc4.CheckedChanged += new System.EventHandler(this.slctFunc4_CheckedChanged);
+            slctFunc4.AutoSize = true;
+            slctFunc4.Location = new Point(211, 430);
+            slctFunc4.Name = "slctFunc4";
+            slctFunc4.Size = new Size(15, 14);
+            slctFunc4.TabIndex = 40;
+            slctFunc4.UseVisualStyleBackColor = true;
+            slctFunc4.CheckedChanged += slctFunc4_CheckedChanged;
             // 
             // txtFunc5
             // 
-            this.txtFunc5.Location = new System.Drawing.Point(36, 540);
-            this.txtFunc5.Name = "txtFunc5";
-            this.txtFunc5.Size = new System.Drawing.Size(170, 23);
-            this.txtFunc5.TabIndex = 34;
-            this.txtFunc5.TextChanged += new System.EventHandler(this.txtFunc5_TextChanged);
+            txtFunc5.Location = new Point(36, 540);
+            txtFunc5.Name = "txtFunc5";
+            txtFunc5.Size = new Size(170, 23);
+            txtFunc5.TabIndex = 34;
+            txtFunc5.TextChanged += txtFunc5_TextChanged;
             // 
             // txtFunc4
             // 
-            this.txtFunc4.Location = new System.Drawing.Point(36, 425);
-            this.txtFunc4.Name = "txtFunc4";
-            this.txtFunc4.Size = new System.Drawing.Size(170, 23);
-            this.txtFunc4.TabIndex = 33;
-            this.txtFunc4.TextChanged += new System.EventHandler(this.txtFunc4_TextChanged);
+            txtFunc4.Location = new Point(36, 425);
+            txtFunc4.Name = "txtFunc4";
+            txtFunc4.Size = new Size(170, 23);
+            txtFunc4.TabIndex = 33;
+            txtFunc4.TextChanged += txtFunc4_TextChanged;
             // 
             // txtFunc3
             // 
-            this.txtFunc3.Location = new System.Drawing.Point(36, 310);
-            this.txtFunc3.Name = "txtFunc3";
-            this.txtFunc3.Size = new System.Drawing.Size(170, 23);
-            this.txtFunc3.TabIndex = 32;
-            this.txtFunc3.TextChanged += new System.EventHandler(this.txtFunc3_TextChanged);
+            txtFunc3.Location = new Point(36, 310);
+            txtFunc3.Name = "txtFunc3";
+            txtFunc3.Size = new Size(170, 23);
+            txtFunc3.TabIndex = 32;
+            txtFunc3.TextChanged += txtFunc3_TextChanged;
             // 
             // lby2
             // 
-            this.lby2.AutoSize = true;
-            this.lby2.Location = new System.Drawing.Point(16, 198);
-            this.lby2.Name = "lby2";
-            this.lby2.Size = new System.Drawing.Size(24, 15);
-            this.lby2.TabIndex = 30;
-            this.lby2.Text = "y =";
+            lby2.AutoSize = true;
+            lby2.Location = new Point(16, 198);
+            lby2.Name = "lby2";
+            lby2.Size = new Size(24, 15);
+            lby2.TabIndex = 30;
+            lby2.Text = "y =";
             // 
             // lby1
             // 
-            this.lby1.AutoSize = true;
-            this.lby1.Location = new System.Drawing.Point(16, 83);
-            this.lby1.Name = "lby1";
-            this.lby1.Size = new System.Drawing.Size(24, 15);
-            this.lby1.TabIndex = 26;
-            this.lby1.Text = "y =";
+            lby1.AutoSize = true;
+            lby1.Location = new Point(16, 83);
+            lby1.Name = "lby1";
+            lby1.Size = new Size(24, 15);
+            lby1.TabIndex = 26;
+            lby1.Text = "y =";
             // 
             // lby3
             // 
-            this.lby3.AutoSize = true;
-            this.lby3.Location = new System.Drawing.Point(16, 313);
-            this.lby3.Name = "lby3";
-            this.lby3.Size = new System.Drawing.Size(24, 15);
-            this.lby3.TabIndex = 41;
-            this.lby3.Text = "y =";
+            lby3.AutoSize = true;
+            lby3.Location = new Point(16, 313);
+            lby3.Name = "lby3";
+            lby3.Size = new Size(24, 15);
+            lby3.TabIndex = 41;
+            lby3.Text = "y =";
             // 
             // lby4
             // 
-            this.lby4.AutoSize = true;
-            this.lby4.Location = new System.Drawing.Point(16, 428);
-            this.lby4.Name = "lby4";
-            this.lby4.Size = new System.Drawing.Size(24, 15);
-            this.lby4.TabIndex = 42;
-            this.lby4.Text = "y =";
+            lby4.AutoSize = true;
+            lby4.Location = new Point(16, 428);
+            lby4.Name = "lby4";
+            lby4.Size = new Size(24, 15);
+            lby4.TabIndex = 42;
+            lby4.Text = "y =";
             // 
             // lby5
             // 
-            this.lby5.AutoSize = true;
-            this.lby5.Location = new System.Drawing.Point(16, 543);
-            this.lby5.Name = "lby5";
-            this.lby5.Size = new System.Drawing.Size(24, 15);
-            this.lby5.TabIndex = 43;
-            this.lby5.Text = "y =";
+            lby5.AutoSize = true;
+            lby5.Location = new Point(16, 543);
+            lby5.Name = "lby5";
+            lby5.Size = new Size(24, 15);
+            lby5.TabIndex = 43;
+            lby5.Text = "y =";
             // 
             // slctFunc3
             // 
-            this.slctFunc3.AutoSize = true;
-            this.slctFunc3.Location = new System.Drawing.Point(211, 315);
-            this.slctFunc3.Name = "slctFunc3";
-            this.slctFunc3.Size = new System.Drawing.Size(15, 14);
-            this.slctFunc3.TabIndex = 44;
-            this.slctFunc3.UseVisualStyleBackColor = true;
-            this.slctFunc3.CheckedChanged += new System.EventHandler(this.slctFunc3_CheckedChanged);
+            slctFunc3.AutoSize = true;
+            slctFunc3.Location = new Point(211, 315);
+            slctFunc3.Name = "slctFunc3";
+            slctFunc3.Size = new Size(15, 14);
+            slctFunc3.TabIndex = 44;
+            slctFunc3.UseVisualStyleBackColor = true;
+            slctFunc3.CheckedChanged += slctFunc3_CheckedChanged;
             // 
             // slctFunc2
             // 
-            this.slctFunc2.AutoSize = true;
-            this.slctFunc2.Location = new System.Drawing.Point(211, 200);
-            this.slctFunc2.Name = "slctFunc2";
-            this.slctFunc2.Size = new System.Drawing.Size(15, 14);
-            this.slctFunc2.TabIndex = 45;
-            this.slctFunc2.UseVisualStyleBackColor = true;
-            this.slctFunc2.CheckedChanged += new System.EventHandler(this.slctFunc2_CheckedChanged);
+            slctFunc2.AutoSize = true;
+            slctFunc2.Location = new Point(211, 200);
+            slctFunc2.Name = "slctFunc2";
+            slctFunc2.Size = new Size(15, 14);
+            slctFunc2.TabIndex = 45;
+            slctFunc2.UseVisualStyleBackColor = true;
+            slctFunc2.CheckedChanged += slctFunc2_CheckedChanged;
             // 
             // slctFunc1
             // 
-            this.slctFunc1.AutoSize = true;
-            this.slctFunc1.Location = new System.Drawing.Point(211, 85);
-            this.slctFunc1.Name = "slctFunc1";
-            this.slctFunc1.Size = new System.Drawing.Size(15, 14);
-            this.slctFunc1.TabIndex = 46;
-            this.slctFunc1.UseVisualStyleBackColor = true;
-            this.slctFunc1.CheckedChanged += new System.EventHandler(this.slctFunc1_CheckedChanged);
+            slctFunc1.AutoSize = true;
+            slctFunc1.Location = new Point(211, 85);
+            slctFunc1.Name = "slctFunc1";
+            slctFunc1.Size = new Size(15, 14);
+            slctFunc1.TabIndex = 46;
+            slctFunc1.UseVisualStyleBackColor = true;
+            slctFunc1.CheckedChanged += slctFunc1_CheckedChanged;
             // 
             // slctFunc5
             // 
-            this.slctFunc5.AutoSize = true;
-            this.slctFunc5.Location = new System.Drawing.Point(211, 545);
-            this.slctFunc5.Name = "slctFunc5";
-            this.slctFunc5.Size = new System.Drawing.Size(15, 14);
-            this.slctFunc5.TabIndex = 47;
-            this.slctFunc5.UseVisualStyleBackColor = true;
-            this.slctFunc5.CheckedChanged += new System.EventHandler(this.slctFunc5_CheckedChanged);
+            slctFunc5.AutoSize = true;
+            slctFunc5.Location = new Point(211, 545);
+            slctFunc5.Name = "slctFunc5";
+            slctFunc5.Size = new Size(15, 14);
+            slctFunc5.TabIndex = 47;
+            slctFunc5.UseVisualStyleBackColor = true;
+            slctFunc5.CheckedChanged += slctFunc5_CheckedChanged;
             // 
             // txtFunc2
             // 
-            this.txtFunc2.Location = new System.Drawing.Point(36, 195);
-            this.txtFunc2.Name = "txtFunc2";
-            this.txtFunc2.Size = new System.Drawing.Size(170, 23);
-            this.txtFunc2.TabIndex = 48;
-            this.txtFunc2.TextChanged += new System.EventHandler(this.txtFunc2_TextChanged);
+            txtFunc2.Location = new Point(36, 195);
+            txtFunc2.Name = "txtFunc2";
+            txtFunc2.Size = new Size(170, 23);
+            txtFunc2.TabIndex = 48;
+            txtFunc2.TextChanged += txtFunc2_TextChanged;
             // 
             // txtFunc1
             // 
-            this.txtFunc1.Location = new System.Drawing.Point(36, 80);
-            this.txtFunc1.Name = "txtFunc1";
-            this.txtFunc1.Size = new System.Drawing.Size(170, 23);
-            this.txtFunc1.TabIndex = 49;
-            this.txtFunc1.TextChanged += new System.EventHandler(this.txtFunc1_TextChanged);
+            txtFunc1.Location = new Point(36, 80);
+            txtFunc1.Name = "txtFunc1";
+            txtFunc1.Size = new Size(170, 23);
+            txtFunc1.TabIndex = 49;
+            txtFunc1.TextChanged += txtFunc1_TextChanged;
             // 
             // btExitG
             // 
-            this.btExitG.Location = new System.Drawing.Point(931, 9);
-            this.btExitG.Name = "btExitG";
-            this.btExitG.Size = new System.Drawing.Size(95, 44);
-            this.btExitG.TabIndex = 50;
-            this.btExitG.Text = "Exit";
-            this.btExitG.UseVisualStyleBackColor = true;
-            this.btExitG.Click += new System.EventHandler(this.btExitG_Click);
+            btExitG.Location = new Point(931, 9);
+            btExitG.Name = "btExitG";
+            btExitG.Size = new Size(95, 44);
+            btExitG.TabIndex = 50;
+            btExitG.Text = "Exit";
+            btExitG.UseVisualStyleBackColor = true;
+            btExitG.Click += btExitG_Click;
             // 
             // pbGraph
             // 
-            this.pbGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbGraph.Location = new System.Drawing.Point(369, 65);
-            this.pbGraph.Name = "pbGraph";
-            this.pbGraph.Size = new System.Drawing.Size(657, 601);
-            this.pbGraph.TabIndex = 53;
-            this.pbGraph.TabStop = false;
-            this.pbGraph.Click += new System.EventHandler(this.pbGraph_Click);
+            pbGraph.BorderStyle = BorderStyle.FixedSingle;
+            pbGraph.Location = new Point(369, 65);
+            pbGraph.Name = "pbGraph";
+            pbGraph.Size = new Size(657, 601);
+            pbGraph.TabIndex = 53;
+            pbGraph.TabStop = false;
+            pbGraph.Click += pbGraph_Click;
+            pbGraph.MouseHover += pbGraph_MouseHover;
             // 
             // pbZoomIn
             // 
-            this.pbZoomIn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbZoomIn.Image = ((System.Drawing.Image)(resources.GetObject("pbZoomIn.Image")));
-            this.pbZoomIn.Location = new System.Drawing.Point(479, 16);
-            this.pbZoomIn.Name = "pbZoomIn";
-            this.pbZoomIn.Size = new System.Drawing.Size(30, 30);
-            this.pbZoomIn.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbZoomIn.TabIndex = 54;
-            this.pbZoomIn.TabStop = false;
-            this.pbZoomIn.Click += new System.EventHandler(this.pbZoomIn_Click);
+            pbZoomIn.BorderStyle = BorderStyle.Fixed3D;
+            pbZoomIn.Image = (Image)resources.GetObject("pbZoomIn.Image");
+            pbZoomIn.Location = new Point(479, 16);
+            pbZoomIn.Name = "pbZoomIn";
+            pbZoomIn.Size = new Size(30, 30);
+            pbZoomIn.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbZoomIn.TabIndex = 54;
+            pbZoomIn.TabStop = false;
+            pbZoomIn.Click += pbZoomIn_Click;
             // 
             // pbZoomOut
             // 
-            this.pbZoomOut.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbZoomOut.Image = global::GraphicalCalculatorNEA.Properties.Resources.zoom_out;
-            this.pbZoomOut.Location = new System.Drawing.Point(515, 16);
-            this.pbZoomOut.Name = "pbZoomOut";
-            this.pbZoomOut.Size = new System.Drawing.Size(30, 30);
-            this.pbZoomOut.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbZoomOut.TabIndex = 55;
-            this.pbZoomOut.TabStop = false;
-            this.pbZoomOut.Click += new System.EventHandler(this.pbZoomOut_Click);
+            pbZoomOut.BorderStyle = BorderStyle.Fixed3D;
+            pbZoomOut.Image = Properties.Resources.zoom_out;
+            pbZoomOut.Location = new Point(515, 16);
+            pbZoomOut.Name = "pbZoomOut";
+            pbZoomOut.Size = new Size(30, 30);
+            pbZoomOut.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbZoomOut.TabIndex = 55;
+            pbZoomOut.TabStop = false;
+            pbZoomOut.Click += pbZoomOut_Click;
             // 
             // pbLeft
             // 
-            this.pbLeft.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbLeft.Image = global::GraphicalCalculatorNEA.Properties.Resources.arrow;
-            this.pbLeft.Location = new System.Drawing.Point(637, 16);
-            this.pbLeft.Name = "pbLeft";
-            this.pbLeft.Size = new System.Drawing.Size(30, 30);
-            this.pbLeft.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbLeft.TabIndex = 57;
-            this.pbLeft.TabStop = false;
-            this.pbLeft.Click += new System.EventHandler(this.pbLeft_Click);
+            pbLeft.BorderStyle = BorderStyle.Fixed3D;
+            pbLeft.Image = Properties.Resources.arrow;
+            pbLeft.Location = new Point(637, 16);
+            pbLeft.Name = "pbLeft";
+            pbLeft.Size = new Size(30, 30);
+            pbLeft.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbLeft.TabIndex = 57;
+            pbLeft.TabStop = false;
+            pbLeft.Click += pbLeft_Click;
             // 
             // pbDown
             // 
-            this.pbDown.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbDown.Image = global::GraphicalCalculatorNEA.Properties.Resources.arrowdown;
-            this.pbDown.Location = new System.Drawing.Point(601, 16);
-            this.pbDown.Name = "pbDown";
-            this.pbDown.Size = new System.Drawing.Size(30, 30);
-            this.pbDown.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbDown.TabIndex = 58;
-            this.pbDown.TabStop = false;
-            this.pbDown.Click += new System.EventHandler(this.pbDown_Click);
+            pbDown.BorderStyle = BorderStyle.Fixed3D;
+            pbDown.Image = Properties.Resources.arrowdown;
+            pbDown.Location = new Point(601, 16);
+            pbDown.Name = "pbDown";
+            pbDown.Size = new Size(30, 30);
+            pbDown.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbDown.TabIndex = 58;
+            pbDown.TabStop = false;
+            pbDown.Click += pbDown_Click;
             // 
             // pbUp
             // 
-            this.pbUp.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbUp.Image = global::GraphicalCalculatorNEA.Properties.Resources.arrowup;
-            this.pbUp.Location = new System.Drawing.Point(565, 16);
-            this.pbUp.Name = "pbUp";
-            this.pbUp.Size = new System.Drawing.Size(30, 30);
-            this.pbUp.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbUp.TabIndex = 59;
-            this.pbUp.TabStop = false;
-            this.pbUp.Click += new System.EventHandler(this.pbUp_Click);
+            pbUp.BorderStyle = BorderStyle.Fixed3D;
+            pbUp.Image = Properties.Resources.arrowup;
+            pbUp.Location = new Point(565, 16);
+            pbUp.Name = "pbUp";
+            pbUp.Size = new Size(30, 30);
+            pbUp.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbUp.TabIndex = 59;
+            pbUp.TabStop = false;
+            pbUp.Click += pbUp_Click;
             // 
             // pbRight
             // 
-            this.pbRight.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbRight.Image = global::GraphicalCalculatorNEA.Properties.Resources.arrowright;
-            this.pbRight.Location = new System.Drawing.Point(673, 16);
-            this.pbRight.Name = "pbRight";
-            this.pbRight.Size = new System.Drawing.Size(30, 30);
-            this.pbRight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbRight.TabIndex = 60;
-            this.pbRight.TabStop = false;
-            this.pbRight.Click += new System.EventHandler(this.pbRight_Click);
+            pbRight.BorderStyle = BorderStyle.Fixed3D;
+            pbRight.Image = Properties.Resources.arrowright;
+            pbRight.Location = new Point(673, 16);
+            pbRight.Name = "pbRight";
+            pbRight.Size = new Size(30, 30);
+            pbRight.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbRight.TabIndex = 60;
+            pbRight.TabStop = false;
+            pbRight.Click += pbRight_Click;
             // 
             // Func1Colour
             // 
-            this.Func1Colour.BackColor = System.Drawing.Color.DodgerBlue;
-            this.Func1Colour.Location = new System.Drawing.Point(324, 80);
-            this.Func1Colour.Name = "Func1Colour";
-            this.Func1Colour.Size = new System.Drawing.Size(23, 23);
-            this.Func1Colour.TabIndex = 61;
-            this.Func1Colour.UseVisualStyleBackColor = false;
-            this.Func1Colour.Click += new System.EventHandler(this.Func1Colour_Click);
+            Func1Colour.BackColor = Color.DodgerBlue;
+            Func1Colour.Location = new Point(324, 80);
+            Func1Colour.Name = "Func1Colour";
+            Func1Colour.Size = new Size(23, 23);
+            Func1Colour.TabIndex = 61;
+            Func1Colour.UseVisualStyleBackColor = false;
+            Func1Colour.Click += Func1Colour_Click;
             // 
             // Func5Colour
             // 
-            this.Func5Colour.BackColor = System.Drawing.Color.Cyan;
-            this.Func5Colour.Location = new System.Drawing.Point(324, 540);
-            this.Func5Colour.Name = "Func5Colour";
-            this.Func5Colour.Size = new System.Drawing.Size(23, 23);
-            this.Func5Colour.TabIndex = 62;
-            this.Func5Colour.UseVisualStyleBackColor = false;
-            this.Func5Colour.Click += new System.EventHandler(this.Func5Colour_Click);
+            Func5Colour.BackColor = Color.Cyan;
+            Func5Colour.Location = new Point(324, 540);
+            Func5Colour.Name = "Func5Colour";
+            Func5Colour.Size = new Size(23, 23);
+            Func5Colour.TabIndex = 62;
+            Func5Colour.UseVisualStyleBackColor = false;
+            Func5Colour.Click += Func5Colour_Click;
             // 
             // Func4Colour
             // 
-            this.Func4Colour.BackColor = System.Drawing.Color.Magenta;
-            this.Func4Colour.Location = new System.Drawing.Point(324, 425);
-            this.Func4Colour.Name = "Func4Colour";
-            this.Func4Colour.Size = new System.Drawing.Size(23, 23);
-            this.Func4Colour.TabIndex = 63;
-            this.Func4Colour.UseVisualStyleBackColor = false;
-            this.Func4Colour.Click += new System.EventHandler(this.Func4Colour_Click);
+            Func4Colour.BackColor = Color.Magenta;
+            Func4Colour.Location = new Point(324, 425);
+            Func4Colour.Name = "Func4Colour";
+            Func4Colour.Size = new Size(23, 23);
+            Func4Colour.TabIndex = 63;
+            Func4Colour.UseVisualStyleBackColor = false;
+            Func4Colour.Click += Func4Colour_Click;
             // 
             // Func3Colour
             // 
-            this.Func3Colour.BackColor = System.Drawing.Color.Green;
-            this.Func3Colour.Location = new System.Drawing.Point(324, 310);
-            this.Func3Colour.Name = "Func3Colour";
-            this.Func3Colour.Size = new System.Drawing.Size(23, 23);
-            this.Func3Colour.TabIndex = 64;
-            this.Func3Colour.UseVisualStyleBackColor = false;
-            this.Func3Colour.Click += new System.EventHandler(this.Func3Colour_Click);
+            Func3Colour.BackColor = Color.Green;
+            Func3Colour.Location = new Point(324, 310);
+            Func3Colour.Name = "Func3Colour";
+            Func3Colour.Size = new Size(23, 23);
+            Func3Colour.TabIndex = 64;
+            Func3Colour.UseVisualStyleBackColor = false;
+            Func3Colour.Click += Func3Colour_Click;
             // 
             // Func2Colour
             // 
-            this.Func2Colour.BackColor = System.Drawing.Color.Red;
-            this.Func2Colour.Location = new System.Drawing.Point(324, 195);
-            this.Func2Colour.Name = "Func2Colour";
-            this.Func2Colour.Size = new System.Drawing.Size(23, 23);
-            this.Func2Colour.TabIndex = 65;
-            this.Func2Colour.UseVisualStyleBackColor = false;
-            this.Func2Colour.Click += new System.EventHandler(this.Func2Colour_Click);
+            Func2Colour.BackColor = Color.Red;
+            Func2Colour.Location = new Point(324, 195);
+            Func2Colour.Name = "Func2Colour";
+            Func2Colour.Size = new Size(23, 23);
+            Func2Colour.TabIndex = 65;
+            Func2Colour.UseVisualStyleBackColor = false;
+            Func2Colour.Click += Func2Colour_Click;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(232, 84);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 15);
-            this.label2.TabIndex = 66;
-            this.label2.Text = "Choose Colour:";
+            label2.AutoSize = true;
+            label2.Location = new Point(232, 84);
+            label2.Name = "label2";
+            label2.Size = new Size(89, 15);
+            label2.TabIndex = 66;
+            label2.Text = "Choose Colour:";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(232, 198);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 15);
-            this.label3.TabIndex = 67;
-            this.label3.Text = "Choose Colour:";
+            label3.AutoSize = true;
+            label3.Location = new Point(232, 198);
+            label3.Name = "label3";
+            label3.Size = new Size(89, 15);
+            label3.TabIndex = 67;
+            label3.Text = "Choose Colour:";
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(232, 313);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(89, 15);
-            this.label4.TabIndex = 68;
-            this.label4.Text = "Choose Colour:";
+            label4.AutoSize = true;
+            label4.Location = new Point(232, 313);
+            label4.Name = "label4";
+            label4.Size = new Size(89, 15);
+            label4.TabIndex = 68;
+            label4.Text = "Choose Colour:";
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(232, 429);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(89, 15);
-            this.label5.TabIndex = 69;
-            this.label5.Text = "Choose Colour:";
+            label5.AutoSize = true;
+            label5.Location = new Point(232, 429);
+            label5.Name = "label5";
+            label5.Size = new Size(89, 15);
+            label5.TabIndex = 69;
+            label5.Text = "Choose Colour:";
             // 
             // label6
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(232, 543);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(89, 15);
-            this.label6.TabIndex = 70;
-            this.label6.Text = "Choose Colour:";
+            label6.AutoSize = true;
+            label6.Location = new Point(232, 543);
+            label6.Name = "label6";
+            label6.Size = new Size(89, 15);
+            label6.TabIndex = 70;
+            label6.Text = "Choose Colour:";
             // 
             // pbCursor
             // 
-            this.pbCursor.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.pbCursor.Image = global::GraphicalCalculatorNEA.Properties.Resources.mousecursor2;
-            this.pbCursor.Location = new System.Drawing.Point(443, 16);
-            this.pbCursor.Name = "pbCursor";
-            this.pbCursor.Size = new System.Drawing.Size(30, 30);
-            this.pbCursor.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pbCursor.TabIndex = 71;
-            this.pbCursor.TabStop = false;
-            this.pbCursor.Click += new System.EventHandler(this.pbCursor_Click);
+            pbCursor.BorderStyle = BorderStyle.Fixed3D;
+            pbCursor.Image = Properties.Resources.mousecursor2;
+            pbCursor.Location = new Point(443, 16);
+            pbCursor.Name = "pbCursor";
+            pbCursor.Size = new Size(30, 30);
+            pbCursor.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbCursor.TabIndex = 71;
+            pbCursor.TabStop = false;
+            pbCursor.Click += pbCursor_Click;
             // 
             // lbFunc1Info
             // 
-            this.lbFunc1Info.FormattingEnabled = true;
-            this.lbFunc1Info.ItemHeight = 15;
-            this.lbFunc1Info.Location = new System.Drawing.Point(17, 109);
-            this.lbFunc1Info.Name = "lbFunc1Info";
-            this.lbFunc1Info.Size = new System.Drawing.Size(330, 79);
-            this.lbFunc1Info.TabIndex = 77;
+            lbFunc1Info.FormattingEnabled = true;
+            lbFunc1Info.ItemHeight = 15;
+            lbFunc1Info.Location = new Point(17, 109);
+            lbFunc1Info.Name = "lbFunc1Info";
+            lbFunc1Info.Size = new Size(330, 79);
+            lbFunc1Info.TabIndex = 77;
             // 
             // lbFunc2Info
             // 
-            this.lbFunc2Info.FormattingEnabled = true;
-            this.lbFunc2Info.ItemHeight = 15;
-            this.lbFunc2Info.Location = new System.Drawing.Point(17, 224);
-            this.lbFunc2Info.Name = "lbFunc2Info";
-            this.lbFunc2Info.Size = new System.Drawing.Size(330, 79);
-            this.lbFunc2Info.TabIndex = 78;
+            lbFunc2Info.FormattingEnabled = true;
+            lbFunc2Info.ItemHeight = 15;
+            lbFunc2Info.Location = new Point(17, 224);
+            lbFunc2Info.Name = "lbFunc2Info";
+            lbFunc2Info.Size = new Size(330, 79);
+            lbFunc2Info.TabIndex = 78;
             // 
             // lbFunc3Info
             // 
-            this.lbFunc3Info.FormattingEnabled = true;
-            this.lbFunc3Info.ItemHeight = 15;
-            this.lbFunc3Info.Location = new System.Drawing.Point(17, 339);
-            this.lbFunc3Info.Name = "lbFunc3Info";
-            this.lbFunc3Info.Size = new System.Drawing.Size(330, 79);
-            this.lbFunc3Info.TabIndex = 79;
+            lbFunc3Info.FormattingEnabled = true;
+            lbFunc3Info.ItemHeight = 15;
+            lbFunc3Info.Location = new Point(17, 339);
+            lbFunc3Info.Name = "lbFunc3Info";
+            lbFunc3Info.Size = new Size(330, 79);
+            lbFunc3Info.TabIndex = 79;
             // 
             // lbFunc4Info
             // 
-            this.lbFunc4Info.FormattingEnabled = true;
-            this.lbFunc4Info.ItemHeight = 15;
-            this.lbFunc4Info.Location = new System.Drawing.Point(17, 454);
-            this.lbFunc4Info.Name = "lbFunc4Info";
-            this.lbFunc4Info.Size = new System.Drawing.Size(330, 79);
-            this.lbFunc4Info.TabIndex = 80;
+            lbFunc4Info.FormattingEnabled = true;
+            lbFunc4Info.ItemHeight = 15;
+            lbFunc4Info.Location = new Point(17, 454);
+            lbFunc4Info.Name = "lbFunc4Info";
+            lbFunc4Info.Size = new Size(330, 79);
+            lbFunc4Info.TabIndex = 80;
             // 
             // lbFunc5Info
             // 
-            this.lbFunc5Info.FormattingEnabled = true;
-            this.lbFunc5Info.ItemHeight = 15;
-            this.lbFunc5Info.Location = new System.Drawing.Point(17, 569);
-            this.lbFunc5Info.Name = "lbFunc5Info";
-            this.lbFunc5Info.Size = new System.Drawing.Size(330, 79);
-            this.lbFunc5Info.TabIndex = 81;
+            lbFunc5Info.FormattingEnabled = true;
+            lbFunc5Info.ItemHeight = 15;
+            lbFunc5Info.Location = new Point(17, 569);
+            lbFunc5Info.Name = "lbFunc5Info";
+            lbFunc5Info.Size = new Size(330, 79);
+            lbFunc5Info.TabIndex = 81;
             // 
             // Graph
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1034, 678);
-            this.Controls.Add(this.lbFunc5Info);
-            this.Controls.Add(this.lbFunc4Info);
-            this.Controls.Add(this.lbFunc3Info);
-            this.Controls.Add(this.lbFunc2Info);
-            this.Controls.Add(this.lbFunc1Info);
-            this.Controls.Add(this.pbCursor);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.label5);
-            this.Controls.Add(this.label4);
-            this.Controls.Add(this.label3);
-            this.Controls.Add(this.label2);
-            this.Controls.Add(this.Func2Colour);
-            this.Controls.Add(this.Func3Colour);
-            this.Controls.Add(this.Func4Colour);
-            this.Controls.Add(this.Func5Colour);
-            this.Controls.Add(this.Func1Colour);
-            this.Controls.Add(this.pbRight);
-            this.Controls.Add(this.pbUp);
-            this.Controls.Add(this.pbDown);
-            this.Controls.Add(this.pbLeft);
-            this.Controls.Add(this.pbZoomOut);
-            this.Controls.Add(this.pbZoomIn);
-            this.Controls.Add(this.pbGraph);
-            this.Controls.Add(this.btExitG);
-            this.Controls.Add(this.txtFunc1);
-            this.Controls.Add(this.txtFunc2);
-            this.Controls.Add(this.slctFunc5);
-            this.Controls.Add(this.slctFunc1);
-            this.Controls.Add(this.slctFunc2);
-            this.Controls.Add(this.slctFunc3);
-            this.Controls.Add(this.slctFunc4);
-            this.Controls.Add(this.txtFunc5);
-            this.Controls.Add(this.txtFunc4);
-            this.Controls.Add(this.txtFunc3);
-            this.Controls.Add(this.lby2);
-            this.Controls.Add(this.lby1);
-            this.Controls.Add(this.btHelpG);
-            this.Controls.Add(this.btSettingsG);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.lby3);
-            this.Controls.Add(this.lby4);
-            this.Controls.Add(this.lby5);
-            this.Name = "Graph";
-            this.Text = "Graph";
-            this.Load += new System.EventHandler(this.Graph_Load);
-            this.ResizeEnd += new System.EventHandler(this.Graph_ResizeEnd);
-            this.Resize += new System.EventHandler(this.Graph_Resize);
-            ((System.ComponentModel.ISupportInitialize)(this.pbGraph)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZoomIn)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbZoomOut)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbDown)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbUp)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbRight)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbCursor)).EndInit();
-            this.ResumeLayout(false);
-            this.PerformLayout();
-
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
+            ClientSize = new Size(1034, 678);
+            Controls.Add(lbFunc5Info);
+            Controls.Add(lbFunc4Info);
+            Controls.Add(lbFunc3Info);
+            Controls.Add(lbFunc2Info);
+            Controls.Add(lbFunc1Info);
+            Controls.Add(pbCursor);
+            Controls.Add(label6);
+            Controls.Add(label5);
+            Controls.Add(label4);
+            Controls.Add(label3);
+            Controls.Add(label2);
+            Controls.Add(Func2Colour);
+            Controls.Add(Func3Colour);
+            Controls.Add(Func4Colour);
+            Controls.Add(Func5Colour);
+            Controls.Add(Func1Colour);
+            Controls.Add(pbRight);
+            Controls.Add(pbUp);
+            Controls.Add(pbDown);
+            Controls.Add(pbLeft);
+            Controls.Add(pbZoomOut);
+            Controls.Add(pbZoomIn);
+            Controls.Add(pbGraph);
+            Controls.Add(btExitG);
+            Controls.Add(txtFunc1);
+            Controls.Add(txtFunc2);
+            Controls.Add(slctFunc5);
+            Controls.Add(slctFunc1);
+            Controls.Add(slctFunc2);
+            Controls.Add(slctFunc3);
+            Controls.Add(slctFunc4);
+            Controls.Add(txtFunc5);
+            Controls.Add(txtFunc4);
+            Controls.Add(txtFunc3);
+            Controls.Add(lby2);
+            Controls.Add(lby1);
+            Controls.Add(btHelpG);
+            Controls.Add(btSettingsG);
+            Controls.Add(label1);
+            Controls.Add(lby3);
+            Controls.Add(lby4);
+            Controls.Add(lby5);
+            Name = "Graph";
+            Text = "Graph";
+            Load += Graph_Load;
+            ResizeEnd += Graph_ResizeEnd;
+            Resize += Graph_Resize;
+            ((System.ComponentModel.ISupportInitialize)pbGraph).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbZoomIn).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbZoomOut).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbLeft).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbDown).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbUp).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbRight).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pbCursor).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion

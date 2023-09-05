@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.Devices;
+using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,11 +17,20 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace GraphicalCalculatorNEA
 {
-    //Roots calculation - do a sign change method for greater reliability 
     public partial class Graph : Form
     {
         PointF[] CartPoints = new PointF[5000];
         PointF[] PixPoints = new PointF[5000];
+        PointF[] CartPoints1;
+        PointF[] CartPoints2;
+        PointF[] CartPoints3;
+        PointF[] CartPoints4;
+        PointF[] CartPoints5;
+        PointF[] PixPoints1;
+        PointF[] PixPoints2;
+        PointF[] PixPoints3;
+        PointF[] PixPoints4;
+        PointF[] PixPoints5;
         float xoffset;
         float yoffset;
         float xorigin;
@@ -73,8 +84,8 @@ namespace GraphicalCalculatorNEA
         private PointF CartToPix(float x, float y)
         {
             PointF pix = new PointF(0, 0);
-            pix.X = xoffset + ((x - xorigin)  * xfactor);
-            pix.Y = yoffset + ((yorigin - y)  * yfactor);
+            pix.X = xoffset + ((x - xorigin) * xfactor);
+            pix.Y = yoffset + ((yorigin - y) * yfactor);
             return pix;
         }
         private PointF PixToCart(float x, float y)
@@ -87,7 +98,7 @@ namespace GraphicalCalculatorNEA
         private void GetPointArray(string function)
         {
             SetOffset();
-            float step = (MaxX - MinX)/5000;
+            float step = (MaxX - MinX) / 5000;
             for (int i = 0; i < CartPoints.Length; i++)
             {
                 CartPoints[i].X = MinX + step * i;
@@ -395,16 +406,54 @@ namespace GraphicalCalculatorNEA
             string yintercept = parser.Evaluate(parser.root, Convert.ToString(0)).value;
             return yintercept;
         }
-        
+        private string SignChange(double a, double b)
+        {
+            string root = "";
+            double precision = 0.0001;
+            while (Math.Abs(b - a) > precision)
+            {
+                double c = (b - a) / 2;
+                double cY = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(c)).value);
+                double aY = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(a)).value);
+                double bY = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(b)).value);
+                if (Math.Abs(cY) < precision)
+                {
+                    root = "x = " + Convert.ToString(c);
+                }
+                else if (aY * cY > 0)
+                {
+                    a = c;
+                }
+                else if (bY * cY > 0)
+                {
+                    b = c;
+                }
+            }
+            return root;
+        }
         private List<string> GetRoots()
         {
             List<string> roots = new List<string>();
-            float range = (MaxX - MinX)/5000;
-            for (int i = 0; i < CartPoints.Length; i++)
+            int index = 0;
+            int count = 0;
+            for (int i = 1; i < CartPoints.Length - 1; i++)
             {
-                if (CartPoints[i].Y >= -range && CartPoints[i].Y <= range)
+                if (Convert.ToString(CartPoints[i].Y) == "0")
                 {
-                    string root = "x = " + Convert.ToString(Math.Round(CartPoints[i].X, 1));
+                    if (index + 1 == i)
+                    {
+                        count++;
+                    }
+                    else
+                    {
+                        roots.Add("x = " + Convert.ToString(CartPoints[i].X));
+                    }
+                    index = i;
+                }
+                else if ((CartPoints[i - 1].Y < 0 && CartPoints[i].Y > 0) ||
+                   (CartPoints[i - 1].Y > 0 && CartPoints[i].Y < 0))
+                {
+                    string root = SignChange(CartPoints[i - 1].X, CartPoints[i].X);
                     if (roots.Contains(root) == false)
                     {
                         roots.Add(root);
@@ -474,30 +523,40 @@ namespace GraphicalCalculatorNEA
                 Pen pen = new Pen(Func1Colour.BackColor);
                 DrawGraph(pen, txtFunc1.Text);
                 DisplayInfo(lbFunc1Info, txtFunc1.Text);
+                CartPoints1 = CartPoints;
+                PixPoints1 = PixPoints;
             }
             if (slctFunc2.Checked)
             {
                 Pen pen = new Pen(Func2Colour.BackColor);
                 DrawGraph(pen, txtFunc2.Text);
                 DisplayInfo(lbFunc2Info, txtFunc2.Text);
+                CartPoints2 = CartPoints;
+                PixPoints2 = PixPoints;
             }
             if (slctFunc3.Checked)
             {
                 Pen pen = new Pen(Func3Colour.BackColor);
                 DrawGraph(pen, txtFunc3.Text);
                 DisplayInfo(lbFunc3Info, txtFunc3.Text);
+                CartPoints3 = CartPoints;
+                PixPoints3 = PixPoints;
             }
             if (slctFunc4.Checked)
             {
                 Pen pen = new Pen(Func4Colour.BackColor);
                 DrawGraph(pen, txtFunc4.Text);
                 DisplayInfo(lbFunc4Info, txtFunc4.Text);
+                CartPoints4 = CartPoints;
+                PixPoints4 = PixPoints;
             }
             if (slctFunc5.Checked)
             {
                 Pen pen = new Pen(Func5Colour.BackColor);
                 DrawGraph(pen, txtFunc5.Text);
                 DisplayInfo(lbFunc5Info, txtFunc5.Text);
+                CartPoints5 = CartPoints;
+                PixPoints5 = PixPoints;
             }
         }
         private void Graph_Load(object sender, EventArgs e)
@@ -756,6 +815,60 @@ namespace GraphicalCalculatorNEA
         private void txtFunc5_TextChanged(object sender, EventArgs e)
         {
             slctFunc5.Checked = false;
+        }
+
+        private void pbGraph_MouseHover(object sender, EventArgs e)
+        {
+            if (slctFunc1.Checked)
+            {
+                for (int i = 0; i < PixPoints1.Length; i++)
+                {
+                    if (PixPoints1[i].X == Cursor.Position.X && PixPoints1[i].Y == Cursor.Position.Y)
+                    {
+                        
+                    }
+                }
+            }
+            if (slctFunc2.Checked)
+            {
+                for (int i = 0; i < PixPoints2.Length; i++)
+                {
+                    if (PixPoints1[i].X == Cursor.Position.X && PixPoints1[i].Y == Cursor.Position.Y)
+                    {
+
+                    }
+                }
+            }
+            if (slctFunc3.Checked)
+            {
+                for (int i = 0; i < PixPoints3.Length; i++)
+                {
+                    if (PixPoints1[i].X == Cursor.Position.X && PixPoints1[i].Y == Cursor.Position.Y)
+                    {
+
+                    }
+                }
+            }
+            if (slctFunc4.Checked)
+            {
+                for (int i = 0; i < PixPoints4.Length; i++)
+                {
+                    if (PixPoints1[i].X == Cursor.Position.X && PixPoints1[i].Y == Cursor.Position.Y)
+                    {
+
+                    }
+                }
+            }
+            if (slctFunc5.Checked)
+            {
+                for (int i = 0; i < PixPoints5.Length; i++)
+                {
+                    if (PixPoints1[i].X == Cursor.Position.X && PixPoints1[i].Y == Cursor.Position.Y)
+                    {
+
+                    }
+                }
+            }
         }
     }
 }
