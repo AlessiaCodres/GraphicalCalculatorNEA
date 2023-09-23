@@ -33,6 +33,7 @@ namespace GraphicalCalculatorNEA
             }
             writer.Close();
             Graph graph = new();
+            graph.UpdateFunctions();
             graph.FuncCheck();
         }
         private void Validation()
@@ -44,8 +45,8 @@ namespace GraphicalCalculatorNEA
                     lbInvalid.Text = "Invalid: Minimum cannot be >= maximum.";
                     valid = false;
                 }
-                if (Convert.ToDouble(tbxMinX.Text) <= -300 || Convert.ToDouble(tbxMinY.Text) <= -300 || 
-                    Convert.ToDouble(tbxMaxX.Text) >= 300 || Convert.ToDouble(tbxMaxY.Text) >= 300)
+                if (Convert.ToDouble(tbxMinX.Text) < -300 || Convert.ToDouble(tbxMinY.Text) < -300 || 
+                    Convert.ToDouble(tbxMaxX.Text) > 300 || Convert.ToDouble(tbxMaxY.Text) > 300)
                 {
                     lbInvalid.Text = "Invalid: Must be in the range -300 <= Settings <= 300.";
                     valid = false;
@@ -109,6 +110,7 @@ namespace GraphicalCalculatorNEA
         {
             if (valid == true)
             {
+                WriteFile();
                 Close();
             }
             else
@@ -133,38 +135,29 @@ namespace GraphicalCalculatorNEA
         private void tbxMinX_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            ReadFile();
             lines[0] = tbxMinX.Text;
-            WriteFile();
         }
 
         private void tbxMaxX_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            ReadFile();
             lines[1] = tbxMaxX.Text;
-            WriteFile();
         }
 
         private void tbxMinY_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            ReadFile();
             lines[2] = tbxMinY.Text;
-            WriteFile();
         }
 
         private void tbxMaxY_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            ReadFile();
             lines[3] = tbxMaxY.Text;
-            WriteFile();
         }
 
         private void rbtRadians_CheckedChanged(object sender, EventArgs e)
         {
-            ReadFile();
             if (rbtRadians.Checked)
             {
                 lines[4] = "Radians";
@@ -173,7 +166,6 @@ namespace GraphicalCalculatorNEA
             {
                 lines[4] = "Degrees";
             }
-            WriteFile();
         }
 
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
@@ -181,10 +173,10 @@ namespace GraphicalCalculatorNEA
             if (valid == false)
             {
                 StreamWriter writer = new StreamWriter("Settings.txt");
-                writer.WriteLine("-1000");
-                writer.WriteLine("1000");
-                writer.WriteLine("-1000");
-                writer.WriteLine("1000");
+                writer.WriteLine("-300");
+                writer.WriteLine("300");
+                writer.WriteLine("-300");
+                writer.WriteLine("300");
                 writer.Close();
             }
         }

@@ -72,6 +72,7 @@
             lbFunc3Info = new ListBox();
             lbFunc4Info = new ListBox();
             lbFunc5Info = new ListBox();
+            lbCoords = new Label();
             ((System.ComponentModel.ISupportInitialize)pbGraph).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbZoomIn).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbZoomOut).BeginInit();
@@ -266,7 +267,7 @@
             pbGraph.TabIndex = 53;
             pbGraph.TabStop = false;
             pbGraph.Click += pbGraph_Click;
-            pbGraph.MouseHover += pbGraph_MouseHover;
+            pbGraph.MouseClick += pbGraph_MouseClick;
             // 
             // pbZoomIn
             // 
@@ -492,12 +493,21 @@
             lbFunc5Info.Size = new Size(330, 79);
             lbFunc5Info.TabIndex = 81;
             // 
+            // lbCoords
+            // 
+            lbCoords.AutoSize = true;
+            lbCoords.Location = new Point(369, 651);
+            lbCoords.Name = "lbCoords";
+            lbCoords.Size = new Size(0, 15);
+            lbCoords.TabIndex = 82;
+            // 
             // Graph
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(1034, 678);
+            Controls.Add(lbCoords);
             Controls.Add(lbFunc5Info);
             Controls.Add(lbFunc4Info);
             Controls.Add(lbFunc3Info);
@@ -602,5 +612,6 @@
         private ListBox lbFunc3Info;
         private ListBox lbFunc4Info;
         private ListBox lbFunc5Info;
+        private Label lbCoords;
     }
 }
