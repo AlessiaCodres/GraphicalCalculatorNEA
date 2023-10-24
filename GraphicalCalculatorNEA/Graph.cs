@@ -19,6 +19,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 namespace GraphicalCalculatorNEA
 {
     //check file existance settings
+    //intersection points
     public partial class Graph : Form
     {
         Function function1 = new Function();
@@ -36,6 +37,8 @@ namespace GraphicalCalculatorNEA
         float MaxY;
         float xfactor;
         float yfactor;
+        float xaxisPos = 0;
+        float yaxisPos = 0;
         Graphics graphObj;
         Parser parser;
         string cursor = "default";
@@ -124,8 +127,6 @@ namespace GraphicalCalculatorNEA
         }
         private void DrawAxes(float xgap, float ygap)
         {
-            float xaxisPos = 0;
-            float yaxisPos = 0;
             Pen blackpen = new Pen(Color.Black, 2);
             if (MinX <= 0 && MaxX >= 0)
             {
@@ -394,11 +395,57 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
-        private string GetYIntercept(string function)
+        private string GetYIntercept(Function function)
         {
-            parser = new Parser(function);
+            parser = new Parser(function.function);
             string yintercept = parser.Evaluate(parser.root, Convert.ToString(0)).value;
             return yintercept;
+        }
+        private string NewtonRaphson(double x, Function function, int index)
+        {
+            Parser parser = new Parser(function.function);
+            double derivative = (function.CartPoints[index + 1].Y - function.CartPoints[index].Y) / (function.CartPoints[index + 1].X - function.CartPoints[index].X);
+            double y = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x)).value);
+            x = x - (y / derivative);
+            return "x = " + Convert.ToString(Math.Round(x, 2)); 
+        }
+        private string SecantMethod(double x0, double x1, string function)
+        {
+            double tolerance = 0.0001;
+            int maxIterations = 20;
+            int iteration = 1;
+            Parser parser = new Parser(function);
+            double parsedx0 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
+            double parsedx1 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
+            double x2 = x1 - parsedx1 * ((x1 - x0) / (parsedx1 - parsedx0));
+            x0 = x1;
+            x1 = x2;
+            while (Math.Abs(parsedx1) > tolerance && iteration < maxIterations)
+            {
+                x2 = x1 - parsedx1 * ((x1 - x0) / (parsedx1 - parsedx0));
+                x0 = x1;
+                x1 = x2;
+                parsedx0 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
+                parsedx1 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
+                if (parsedx0 == double.NaN && parsedx1 == double.NaN)
+                {
+                    return Convert.ToString(Math.Round(x2, 3));
+                }
+                iteration++;
+            }
+            return Convert.ToString(Math.Round(x2, 3));
+        }
+        private List<string> FindRoots(Function function)
+        {
+            List<string> roots = new List<string>();
+            for (int i = 0; i < function.PixPoints.Length; i++)
+            {
+                if (function.PixPoints[i].Y == xaxisPos)
+                {
+                    roots.Add(Convert.ToString(Math.Round(function.CartPoints[i].X, 3)));
+                }
+            }
+            return roots;
         }
         private string SignChange(double a, double b)
         {
@@ -425,61 +472,108 @@ namespace GraphicalCalculatorNEA
             }
             return root;
         }
-
         private double FindRoot(double x0, double x1, string function)
         {
             double tolerance = 0.000001;
             double step = Math.Abs((x0 - x1) / 50);
             int iteration = 0;
-            int maxIterations = 250;
+            int maxIterations = 20;
             Parser parser = new Parser(function);
             double parsedx0 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
-            while (parsedx0 > tolerance)
+            while (parsedx0 > tolerance && maxIterations > iteration)
             {
                 x0 = step + x0;
                 parsedx0 = Math.Abs(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x0)).value));
-                if (iteration >= maxIterations)
-                {
-                    return Math.Round(x0, 3);
-                }
             }
             return Math.Round(x0, 3);
         }
         private List<string> GetRoots(Function function)
         {
             List<string> roots = new List<string>();
+            string root = "";
             for (int i = 0; i < function.CartPoints.Length; i++)
             {
-                if (Math.Round(function.CartPoints[i].Y,2) == 0)
+                if (Math.Abs(function.CartPoints[i].Y) < 0.01)
                 {
-                    string root = Convert.ToString(FindRoot(function.CartPoints[i].X, function.CartPoints[i + 5].X, function.function));
-                    root = "x = " + root;
+                    root = NewtonRaphson(function.CartPoints[i].X, function, i);
                     if (!roots.Contains(root))
                     {
                         roots.Add(root);
                     }
                 }
-            } 
+            }
+            if (xaxisPos != 0)
+            {
+                List<double> temproots = new List<double>();
+                /*for (int i = 0; i < function.PixPoints.Length; i++)
+                {
+                    if (Convert.ToInt32(function.PixPoints[i].Y) == Convert.ToInt32(xaxisPos))
+                    {
+                        temproots.Add(function.CartPoints[i].X);
+                    }
+                }
+                for (int i = 0; i < temproots.Count - 1; i++)
+                {
+                    if (Math.Abs(temproots[i] - temproots[i + 1]) < 0.5)
+                    {
+                        temproots[i] = (temproots[i] + temproots[i + 1]) / 2;
+                        temproots.Remove(temproots[i + 1]);
+                    }
+                }
+                for (int i = 0; i < temproots.Count; i++)
+                {
+                    roots.Add(Convert.ToString(Math.Round(temproots[i], 2)));
+                }
+                for (int i = 0; i < function.CartPoints.Length; i++)
+                {
+                    if (Math.Round(function.CartPoints[i].Y, 1) == 0.0)
+                    {
+                        root = NewtonRaphson(function.CartPoints[i].X, function, i);
+                        if (!roots.Contains(root))
+                        {
+                            roots.Add(root);
+                        }
+                    }
+                }
+                for (int i = 0; i < function.CartPoints.Length - 1; i++)
+                {
+                    if (function.CartPoints[i].Y < 0 && function.CartPoints[i + 1].Y > 0 || 
+                        function.CartPoints[i].Y > 0 && function.CartPoints[i + 1].Y < 0)
+                    {
+                        float x = (function.CartPoints[i].X + function.CartPoints[i + 1].X) / 2;
+                        string root = Convert.ToString(Math.Round(x, 2));
+                        root = "x = " + root;
+                        if (!roots.Contains(root))
+                        {
+                            roots.Add(root);
+                        }
+                    }
+                }*/
+            }
             return roots;
         }
-        private void DisplayInfo(ListBox lb, string function)
+
+        private void DisplayInfo(ListBox lb, Function function)
         {
             lb.Items.Clear();
             if (error != true)
             {
                 lb.Items.Add("Y-Intercept: " + GetYIntercept(function));
-                /*List<string> roots = GetRoots(function);
+                List<string> roots = GetRoots(function);
                 if (roots.Count > 20)
                 {
                     lb.Items.Add("There are too many roots to display.");
                 }
                 else
                 {
-                    for (int i = 0; i < roots.Count; i++)
+                    if (roots.Count > function.roots.Count)
                     {
-                        lb.Items.Add(roots[i]);
+                        for (int i = 0; i < roots.Count; i++)
+                        {
+                            lb.Items.Add(roots[i]);
+                        }
                     }
-                }*/
+                }
             }
         }
         private void Zoom(float x, float y, float multiplier)
@@ -491,10 +585,10 @@ namespace GraphicalCalculatorNEA
             ydiff = ydiff * multiplier;
             x = PixToCart(x, y).X;
             y = PixToCart(x, y).Y;
-            settings[0] = x - (xdiff / 2);
-            settings[1] = x + (xdiff / 2);
-            settings[2] = y - (ydiff / 2);
-            settings[3] = y + (ydiff / 2);
+            settings[0] = Convert.ToInt32(x - (xdiff / 2));
+            settings[1] = Convert.ToInt32(x + (xdiff / 2));
+            settings[2] = Convert.ToInt32(y - (ydiff / 2));
+            settings[3] = Convert.ToInt32(y + (ydiff / 2));
             for (int i = 0; i < 4; i++)
             {
                 if (settings[i] > 300)
@@ -544,31 +638,31 @@ namespace GraphicalCalculatorNEA
             {
                 Pen pen = new Pen(Func1Colour.BackColor);
                 DrawGraph(pen, function1.PixPoints);
-                DisplayInfo(lbFunc1Info, function1.function);
+                DisplayInfo(lbFunc1Info, function1);
             }
             if (slctFunc2.Checked)
             {
                 Pen pen = new Pen(Func2Colour.BackColor);
                 DrawGraph(pen, function2.PixPoints);
-                DisplayInfo(lbFunc2Info, function2.function);
+                DisplayInfo(lbFunc2Info, function2);
             }
             if (slctFunc3.Checked)
             {
                 Pen pen = new Pen(Func3Colour.BackColor);
                 DrawGraph(pen, function3.PixPoints);
-                DisplayInfo(lbFunc3Info, function3.function);
+                DisplayInfo(lbFunc3Info, function3);
             }
             if (slctFunc4.Checked)
             {
                 Pen pen = new Pen(Func4Colour.BackColor);
                 DrawGraph(pen, function4.PixPoints);
-                DisplayInfo(lbFunc4Info, function4.function);
+                DisplayInfo(lbFunc4Info, function4);
             }
             if (slctFunc5.Checked)
             {
                 Pen pen = new Pen(Func5Colour.BackColor);
                 DrawGraph(pen, function5.PixPoints);
-                DisplayInfo(lbFunc5Info, function5.function);
+                DisplayInfo(lbFunc5Info, function5);
             }
         }
         private void Graph_Load(object sender, EventArgs e)
@@ -587,7 +681,6 @@ namespace GraphicalCalculatorNEA
 
             graphObj = pbGraph.CreateGraphics();
         }
-
         private void Graph_Resize(object sender, EventArgs e)
         {
             int gap = ((ClientRectangle.Height - 65) / 5) - 5;
@@ -636,7 +729,6 @@ namespace GraphicalCalculatorNEA
                 FuncCheck();
             }
         }
-
         private void btExitG_Click(object sender, EventArgs e)
         {
             for (int i = 0; i >= 0; i--)
@@ -644,7 +736,6 @@ namespace GraphicalCalculatorNEA
                 Application.OpenForms[i].Close();
             }
         }
-
         private void btSettingsG_Click(object sender, EventArgs e)
         {
             Settings settings = new Settings();
@@ -664,7 +755,6 @@ namespace GraphicalCalculatorNEA
             slctFunc4.Checked = false;
             slctFunc5.Checked = false;
         }
-
         private void btHelpG_Click(object sender, EventArgs e)
         {
             Help help = new Help();
@@ -695,7 +785,6 @@ namespace GraphicalCalculatorNEA
             }
             FuncCheck();
         }
-
         private void slctFunc3_CheckedChanged(object sender, EventArgs e)
         {
             if (slctFunc3.Checked)
@@ -705,7 +794,6 @@ namespace GraphicalCalculatorNEA
             }
             FuncCheck();
         }
-
         private void slctFunc4_CheckedChanged(object sender, EventArgs e)
         {
             if (slctFunc4.Checked)
@@ -715,7 +803,6 @@ namespace GraphicalCalculatorNEA
             }
             FuncCheck();
         }
-
         private void slctFunc5_CheckedChanged(object sender, EventArgs e)
         {
             if (slctFunc5.Checked)
@@ -725,68 +812,58 @@ namespace GraphicalCalculatorNEA
             }
             FuncCheck();
         }
-
         private void Graph_ResizeEnd(object sender, EventArgs e)
         {
             UpdateFunctions();
             FuncCheck();
         }
-
         private void Func1Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
             Func1Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
-
         private void Func2Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
             Func2Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
-
         private void Func3Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
             Func3Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
-
         private void Func4Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
             Func4Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
-
         private void Func5Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
             Func5Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
-
         private void pbZoomIn_Click(object sender, EventArgs e)
         {
             Cursor zoomIn = new Cursor("CursorZoomIn.cur");
             Cursor = zoomIn;
             cursor = "zoomin";
         }
-
         private void pbZoomOut_Click(object sender, EventArgs e)
         {
             Cursor zoomOut = new Cursor("CursorZoomOut.cur");
             Cursor = zoomOut;
             cursor = "zoomout";
         }
-
         private void pbCursor_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.Default;
             cursor = "default";
         }
-
         private void pbGraph_Click(object sender, EventArgs e)
         {
             if (cursor == "zoomin")
@@ -798,7 +875,6 @@ namespace GraphicalCalculatorNEA
                 Zoom(pbGraph.PointToClient(MousePosition).X, pbGraph.PointToClient(MousePosition).Y, 2);
             }
         }
-
         private void pbUp_Click(object sender, EventArgs e)
         {
             MinY += Math.Abs((MaxY - MinY) / 10);
@@ -807,7 +883,6 @@ namespace GraphicalCalculatorNEA
             UpdateFunctions();
             FuncCheck();
         }
-
         private void pbDown_Click(object sender, EventArgs e)
         {
             MinY -= Math.Abs((MaxY - MinY) / 10);
@@ -816,7 +891,6 @@ namespace GraphicalCalculatorNEA
             UpdateFunctions();
             FuncCheck();
         }
-
         private void pbRight_Click(object sender, EventArgs e)
         {
             MinX += Math.Abs((MaxX - MinX) / 10);
@@ -825,7 +899,6 @@ namespace GraphicalCalculatorNEA
             UpdateFunctions();
             FuncCheck();
         }
-
         private void pbLeft_Click(object sender, EventArgs e)
         {
             MinX -= Math.Abs((MaxX - MinX) / 10);
@@ -834,27 +907,22 @@ namespace GraphicalCalculatorNEA
             UpdateFunctions();
             FuncCheck();
         }
-
         private void txtFunc1_TextChanged(object sender, EventArgs e)
         {
             slctFunc1.Checked = false;
         }
-
         private void txtFunc2_TextChanged(object sender, EventArgs e)
         {
             slctFunc2.Checked = false;
         }
-
         private void txtFunc3_TextChanged(object sender, EventArgs e)
         {
             slctFunc3.Checked = false;
         }
-
         private void txtFunc4_TextChanged(object sender, EventArgs e)
         {
             slctFunc4.Checked = false;
         }
-
         private void txtFunc5_TextChanged(object sender, EventArgs e)
         {
             slctFunc5.Checked = false;
@@ -905,7 +973,8 @@ namespace GraphicalCalculatorNEA
     public class Function
     {
         public string function;
-        public PointF[] CartPoints = new PointF[5000];
-        public PointF[] PixPoints = new PointF[5000];
+        public PointF[] CartPoints = new PointF[10000];
+        public PointF[] PixPoints = new PointF[10000];
+        public List<string> roots = new List<string>();
     }
 }
