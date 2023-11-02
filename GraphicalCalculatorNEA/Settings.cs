@@ -13,8 +13,12 @@ namespace GraphicalCalculatorNEA
 {
     public partial class Settings : Form
     {
-        public string[] lines = new string[5];
-        public bool valid = false;
+        private string[] lines = new string[5];
+        private bool valid = false;
+        public Settings()
+        {
+            InitializeComponent();
+        }
         private void ReadFile()
         {
             StreamReader reader = new StreamReader("Settings.txt");
@@ -45,10 +49,10 @@ namespace GraphicalCalculatorNEA
                     lbInvalid.Text = "Invalid: Minimum cannot be >= maximum.";
                     valid = false;
                 }
-                if (Convert.ToDouble(tbxMinX.Text) < -300 || Convert.ToDouble(tbxMinY.Text) < -300 || 
-                    Convert.ToDouble(tbxMaxX.Text) > 300 || Convert.ToDouble(tbxMaxY.Text) > 300)
+                if (Convert.ToDouble(tbxMinX.Text) < -100 || Convert.ToDouble(tbxMinY.Text) < -100 || 
+                    Convert.ToDouble(tbxMaxX.Text) > 100 || Convert.ToDouble(tbxMaxY.Text) > 100)
                 {
-                    lbInvalid.Text = "Invalid: Must be in the range -300 <= Settings <= 300.";
+                    lbInvalid.Text = "Invalid: Must be in the range -100 <= Settings <= 100.";
                     valid = false;
                 }
                 else
@@ -63,10 +67,6 @@ namespace GraphicalCalculatorNEA
                 lbInvalid.Text = "Invalid.";
                 valid = false;
             }
-        }
-        public Settings()
-        {
-            InitializeComponent();
         }
 
         private void lbSettings_Load(object sender, EventArgs e)
@@ -173,10 +173,10 @@ namespace GraphicalCalculatorNEA
             if (valid == false)
             {
                 StreamWriter writer = new StreamWriter("Settings.txt");
-                writer.WriteLine("-300");
-                writer.WriteLine("300");
-                writer.WriteLine("-300");
-                writer.WriteLine("300");
+                writer.WriteLine("-100");
+                writer.WriteLine("100");
+                writer.WriteLine("-100");
+                writer.WriteLine("100");
                 writer.Close();
             }
         }

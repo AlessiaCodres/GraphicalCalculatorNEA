@@ -39,18 +39,12 @@ namespace GraphicalCalculatorNEA
             value = Value;
         }
     }
-    class Tree
-    {
-        Node root = null;
-        Node currnode = null;
-
-    }
     class Lexer
     {
-        char currchar;
-        Token currtok = new Token(TokenType.LParen, null);
-        int pos;
-        string input;
+        private char currchar;
+        private Token currtok = new Token(TokenType.LParen, null);
+        private int pos;
+        private string input;
 
         public Lexer(string Input)
         {
@@ -280,10 +274,10 @@ namespace GraphicalCalculatorNEA
     class Parser
     {
         public Node root = new Node(null, null, null);
-        Node node = new Node(null, null, null);
-        Token currtok;
-        Lexer lexer;
-        bool error = false;
+        private Node node = new Node(null, null, null);
+        private Token currtok;
+        private Lexer lexer;
+        private bool error = false;
         public Parser(string input)
         {
             lexer = new Lexer(input);
