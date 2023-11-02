@@ -999,14 +999,6 @@ namespace GraphicalCalculatorNEA
                 DisplayInfo(lbFunc5Info, function5);
             }
         }
-        private void GetPixArray(Function function)
-        {
-            for (int i = 0; i < function.PixPoints.Length; i++)
-            {
-                function.PixPoints[i].Y = CartToPix(function.CartPoints[i].X, function.CartPoints[i].Y).Y;
-                function.PixPoints[i].X = CartToPix(function.CartPoints[i].X, function.CartPoints[i].Y).X;
-            }
-        }
         private void UpdateFunction(Function function)
         {
             GetPointArray(function);
