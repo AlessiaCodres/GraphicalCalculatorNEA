@@ -106,9 +106,9 @@ namespace GraphicalCalculatorNEA
             }
             for (int i = 0; i < function.CartPoints.Length; i++)
             {
-                parser = new Parser(function.expression);
                 try
                 {
+                    Parser parser = new Parser(function.expression);
                     double y = Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value), 3);
                     function.CartPoints[i].Y = (float)y;
                 }
@@ -399,7 +399,7 @@ namespace GraphicalCalculatorNEA
         }
         private void GetYIntercept(Function function)
         {
-            parser = new Parser(function.expression);
+            Parser parser = new Parser(function.expression);
             function.yintercept = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(0)).value);
         }
         private string NewtonRaphson(Function function, double x, int index)
@@ -1001,12 +1001,16 @@ namespace GraphicalCalculatorNEA
         }
         private void UpdateFunction(Function function)
         {
+            Parser parser = new Parser(function.expression);
             GetPointArray(function);
-            GetYIntercept(function);
-            GetRoots(function);
-            GetGradients(function);
-            GetMaxPoints(function);
-            GetMinPoints(function);
+            if (!error)
+            {
+                GetYIntercept(function);
+                GetRoots(function);
+                GetGradients(function);
+                GetMaxPoints(function);
+                GetMinPoints(function);
+            }
         }
         public void UpdateFunctions()
         {
