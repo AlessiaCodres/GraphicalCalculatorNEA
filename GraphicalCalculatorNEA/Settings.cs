@@ -19,7 +19,7 @@ namespace GraphicalCalculatorNEA
         {
             InitializeComponent();
         }
-        private void ReadFile()
+        private string[] ReadFile()
         {
             StreamReader reader = new StreamReader("Settings.txt");
             for (int i = 0; i <= 4; i++)
@@ -27,8 +27,9 @@ namespace GraphicalCalculatorNEA
                 lines[i] = reader.ReadLine();
             }
             reader.Close();
+            return lines;
         }
-        private void WriteFile()
+        private string[] WriteFile()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
             for (int i = 0; i <= 4; i++)
@@ -39,6 +40,17 @@ namespace GraphicalCalculatorNEA
             Graph graph = new();
             graph.UpdateFunctions();
             graph.FuncCheck();
+            return lines;
+        }
+        public void InitialiseSettings()
+        {
+            StreamWriter writer = new StreamWriter("Settings.txt");
+            writer.WriteLine("-100");
+            writer.WriteLine("100");
+            writer.WriteLine("-100");
+            writer.WriteLine("100");
+            writer.WriteLine("Radians");
+            writer.Close();
         }
         private void Validation()
         {
@@ -88,7 +100,14 @@ namespace GraphicalCalculatorNEA
             lbRejectClose.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             lbInvalid.Anchor = AnchorStyles.Top | AnchorStyles.Right;
 
-            ReadFile();
+            try
+            {
+                ReadFile();
+            }
+            catch
+            {
+                WriteFile();
+            }
             tbxMinX.Text = lines[0];
             tbxMaxX.Text = lines[1];
             tbxMinY.Text = lines[2];
@@ -172,12 +191,7 @@ namespace GraphicalCalculatorNEA
         {
             if (valid == false)
             {
-                StreamWriter writer = new StreamWriter("Settings.txt");
-                writer.WriteLine("-100");
-                writer.WriteLine("100");
-                writer.WriteLine("-100");
-                writer.WriteLine("100");
-                writer.Close();
+                InitialiseSettings();
             }
         }
 

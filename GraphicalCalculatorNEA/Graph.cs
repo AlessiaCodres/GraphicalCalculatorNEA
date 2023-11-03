@@ -19,6 +19,7 @@ using System.Xml.Serialization;
 using static System.Windows.Forms.DataFormats;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using System.IO;
 
 namespace GraphicalCalculatorNEA
 {
@@ -49,6 +50,11 @@ namespace GraphicalCalculatorNEA
         {
             InitializeComponent();
             MinimumSize = new Size(800, 700);
+            if (!File.Exists("Settings.txt"))
+            {
+                Settings settings = new Settings();
+                settings.InitialiseSettings();
+            }
         }
         private void SetOffset()
         {
@@ -358,6 +364,7 @@ namespace GraphicalCalculatorNEA
             xfactor = pbGraph.Width / (MaxX - MinX);
             yfactor = pbGraph.Height / (MaxY - MinY);
         }
+        
         private void WriteSettings()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
