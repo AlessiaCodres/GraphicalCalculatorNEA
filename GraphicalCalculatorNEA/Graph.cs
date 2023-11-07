@@ -115,8 +115,9 @@ namespace GraphicalCalculatorNEA
                 try
                 {
                     Parser parser = new Parser(function.expression);
-                    double y = Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value), 3);
-                    function.CartPoints[i].Y = (float)y;
+                    string y = Convert.ToString(Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value), 3));
+                    
+                    function.CartPoints[i].Y = (float)Convert.ToDouble(y);
                 }
                 catch
                 {
@@ -364,7 +365,6 @@ namespace GraphicalCalculatorNEA
             xfactor = pbGraph.Width / (MaxX - MinX);
             yfactor = pbGraph.Height / (MaxY - MinY);
         }
-        
         private void WriteSettings()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
@@ -387,178 +387,13 @@ namespace GraphicalCalculatorNEA
                     {
                         if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y))
                         {
-                            try
-                            {
-                                graphObj.DrawLine(pen, pixPoints[i], pixPoints[i + 1]);
-                            }
-                            catch
-                            {
-
-                            }
+                            graphObj.DrawLine(pen, pixPoints[i], pixPoints[i + 1]);
                         }
                     }
                 }
                 catch (OverflowException)
                 {
 
-                }
-            }
-        }
-        private void GetYIntercept(Function function)
-        {
-            Parser parser = new Parser(function.expression);
-            function.yintercept = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(0)).value);
-        }
-        private string NewtonRaphson(Function function, double x, int index)
-        {
-            Parser parser = new Parser(function.expression);
-            double derivative = (function.CartPoints[index + 1].Y - function.CartPoints[index].Y) / (function.CartPoints[index + 1].X - function.CartPoints[index].X);
-            double y = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x)).value);
-            x = Math.Round(x - (y / derivative), 2);
-            if (x == -0)
-            {
-                return "x = " + Convert.ToString(0);
-            }
-            return "x = " + Convert.ToString(x);
-        }
-        private void GetRoots(Function function)
-        {
-            function.roots.Clear();
-            string root;
-            int count = 0;
-            for (int i = 0; i < function.CartPoints.Length - 1; i++)
-            {
-                if (((function.CartPoints[i].Y * function.CartPoints[i + 1].Y < 0) && Math.Abs(function.CartPoints[i].Y) < 1) || function.CartPoints[i].Y == 0)
-                {
-                    for (int j = i - 20; j < i + 20; j++)
-                    {
-                        try
-                        {
-                            if (Math.Abs(function.CartPoints[j].Y) < 0.005)
-                            {
-                                count++;
-                            }
-                        }
-                        catch { }
-                    }
-                    if (count < 20 && function.CartPoints[i].Y != 0)
-                    {
-                        root = NewtonRaphson(function, function.CartPoints[i].X, i);
-                        if (!function.roots.Contains(root))
-                        {
-                            function.roots.Add(root);
-                        }
-                    }
-                    if (count < 20 && function.CartPoints[i].Y == 0)
-                    {
-                        root = "x = " + Math.Round(function.CartPoints[i].X, 2);
-                        if (root == "x = -0")
-                        {
-                            root = "x = 0";
-                        }
-                        if (!function.roots.Contains(root))
-                        {
-                            function.roots.Add(root);
-                        }
-                    }
-                }
-            }
-        }
-        private bool CheckAsymptote(List<PointF> points)
-        {
-            bool asymptote = false;
-            for (int i = 0; i < points.Count; i++)
-            {
-                if (points[i].Y > MaxY || points[i].Y < MinY)
-                {
-                    asymptote = true;
-                    return asymptote;
-                }
-            }
-            return asymptote;
-        }
-        private void GetMaxPoints(Function function)
-        {
-            function.max.Clear();
-            double temp = 0;
-            int index = 0;
-            for (int i = 0; i < function.gradients.Count; i++)
-            {
-                if (function.gradients[i] > 0)
-                {
-                    temp = function.gradients[i];
-                    index = i + 1;
-                }
-                if (function.gradients[i] < 0 && temp > 0)
-                {
-                    double x = Math.Round((function.CartPoints[index].X + function.CartPoints[i + 1].X) / 2, 1);
-                    if (x == -0)
-                    {
-                        x = 0;
-                    }
-                    double y = Math.Round(function.CartPoints[i - 1].Y, 1);
-                    PointF point = new PointF(Convert.ToSingle(x), Convert.ToSingle(y));
-                    if (point.Y == 0)
-                    {
-                        function.roots.Add("x = " + point.X);
-                    }
-                    function.max.Add(point);
-                    temp = 0;
-                    index = 0;
-                }
-            }
-            bool asymptote = CheckAsymptote(function.max);
-            if (asymptote)
-            {
-                function.max.Clear();
-            }
-        }
-        private void GetMinPoints(Function function)
-        {
-            function.min.Clear();
-            double temp = 0;
-            int index = 0;
-            for (int i = 0; i < function.gradients.Count; i++)
-            {
-                if (function.gradients[i] < 0)
-                {
-                    temp = function.gradients[i];
-                    index = i + 1;
-                }
-                if (function.gradients[i] > 0 && temp < 0)
-                {
-                    double x = Math.Round((function.CartPoints[index].X + function.CartPoints[i + 1].X) / 2, 1);
-                    if (x == -0)
-                    {
-                        x = 0;
-                    }
-                    double y = Math.Round(function.CartPoints[i - 1].Y, 1);
-                    PointF point = new PointF(Convert.ToSingle(x), Convert.ToSingle(y));
-                    if (point.Y == 0)
-                    {
-                        function.roots.Add("x = " + point.X);
-                    }
-                    function.min.Add(point);
-                    temp = 0;
-                    index = 0;
-                }
-            }
-            bool asymptote = CheckAsymptote(function.min);
-            if (asymptote)
-            {
-                function.min.Clear();
-            }
-        }
-        private void GetGradients(Function function)
-        {
-            function.gradients.Clear();
-            double m;
-            for (int i = 0; i < function.CartPoints.Length - 1; i++)
-            {
-                m = (function.CartPoints[i + 1].Y - function.CartPoints[i].Y) / (function.CartPoints[i + 1].X - function.CartPoints[i].X);
-                if (!double.IsNaN(m) && !double.IsInfinity(m))
-                {
-                    function.gradients.Add(m);
                 }
             }
         }
@@ -660,7 +495,6 @@ namespace GraphicalCalculatorNEA
             MinY = settings[2];
             MaxY = settings[3];
             WriteSettings();
-            UpdateFunctions();
             FuncCheck();
         }
         private void Graph_Load(object sender, EventArgs e)
@@ -724,7 +558,6 @@ namespace GraphicalCalculatorNEA
 
             if (WindowState == FormWindowState.Maximized)
             {
-                UpdateFunctions();
                 FuncCheck();
             }
         }
@@ -813,7 +646,6 @@ namespace GraphicalCalculatorNEA
         }
         private void Graph_ResizeEnd(object sender, EventArgs e)
         {
-            UpdateFunctions();
             FuncCheck();
         }
         private void Func1Colour_Click(object sender, EventArgs e)
@@ -879,7 +711,6 @@ namespace GraphicalCalculatorNEA
             MinY += Math.Abs((MaxY - MinY) / 10);
             MaxY += Math.Abs((MaxY - MinY) / 10);
             WriteSettings();
-            UpdateFunctions();
             FuncCheck();
         }
         private void pbDown_Click(object sender, EventArgs e)
@@ -887,7 +718,6 @@ namespace GraphicalCalculatorNEA
             MinY -= Math.Abs((MaxY - MinY) / 10);
             MaxY -= Math.Abs((MaxY - MinY) / 10);
             WriteSettings();
-            UpdateFunctions();
             FuncCheck();
         }
         private void pbRight_Click(object sender, EventArgs e)
@@ -895,7 +725,6 @@ namespace GraphicalCalculatorNEA
             MinX += Math.Abs((MaxX - MinX) / 10);
             MaxX += Math.Abs((MaxX - MinX) / 10);
             WriteSettings();
-            UpdateFunctions();
             FuncCheck();
         }
         private void pbLeft_Click(object sender, EventArgs e)
@@ -903,7 +732,6 @@ namespace GraphicalCalculatorNEA
             MinX -= Math.Abs((MaxX - MinX) / 10);
             MaxX -= Math.Abs((MaxX - MinX) / 10);
             WriteSettings();
-            UpdateFunctions();
             FuncCheck();
         }
         private void txtFunc1_TextChanged(object sender, EventArgs e)
@@ -977,30 +805,40 @@ namespace GraphicalCalculatorNEA
             SetOffset();
             if (slctFunc1.Checked)
             {
+                function1.expression = txtFunc1.Text;
+                UpdateFunction(function1);
                 Pen pen = new Pen(Func1Colour.BackColor);
                 DrawGraph(pen, function1.PixPoints);
                 DisplayInfo(lbFunc1Info, function1);
             }
             if (slctFunc2.Checked)
             {
+                function2.expression = txtFunc2.Text;
+                UpdateFunction(function2);
                 Pen pen = new Pen(Func2Colour.BackColor);
                 DrawGraph(pen, function2.PixPoints);
                 DisplayInfo(lbFunc2Info, function2);
             }
             if (slctFunc3.Checked)
             {
+                function3.expression = txtFunc3.Text;
+                UpdateFunction(function3);
                 Pen pen = new Pen(Func3Colour.BackColor);
                 DrawGraph(pen, function3.PixPoints);
                 DisplayInfo(lbFunc3Info, function3);
             }
             if (slctFunc4.Checked)
             {
+                function4.expression = txtFunc4.Text;
+                UpdateFunction(function4);
                 Pen pen = new Pen(Func4Colour.BackColor);
                 DrawGraph(pen, function4.PixPoints);
                 DisplayInfo(lbFunc4Info, function4);
             }
             if (slctFunc5.Checked)
             {
+                function5.expression = txtFunc5.Text;
+                UpdateFunction(function5);
                 Pen pen = new Pen(Func5Colour.BackColor);
                 DrawGraph(pen, function5.PixPoints);
                 DisplayInfo(lbFunc5Info, function5);
@@ -1008,15 +846,14 @@ namespace GraphicalCalculatorNEA
         }
         private void UpdateFunction(Function function)
         {
-            Parser parser = new Parser(function.expression);
             GetPointArray(function);
             if (!error)
             {
-                GetYIntercept(function);
-                GetRoots(function);
-                GetGradients(function);
-                GetMaxPoints(function);
-                GetMinPoints(function);
+                function.GetYIntercept(function);
+                function.GetRoots(function);
+                function.GetGradients(function);
+                function.GetMaxPoints(function, MaxY, MinY);
+                function.GetMinPoints(function, MaxY, MinY);
             }
         }
         public void UpdateFunctions()
@@ -1027,8 +864,6 @@ namespace GraphicalCalculatorNEA
             {
                 function1.expression = txtFunc1.Text;
                 UpdateFunction(function1);
-                function2.expression = txtFunc2.Text;
-                UpdateFunction(function2);
                 function3.expression = txtFunc3.Text;
                 UpdateFunction(function3);
                 function4.expression = txtFunc4.Text;
@@ -1050,6 +885,163 @@ namespace GraphicalCalculatorNEA
         public List<PointF> min = new List<PointF>();
         public List<PointF> max = new List<PointF>();
         public List<double> gradients = new List<double>();
+        public void GetYIntercept(Function function)
+        {
+            Parser parser = new Parser(function.expression);
+            function.yintercept = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(0)).value);
+        }
+        public string NewtonRaphson(Function function, double x, int index)
+        {
+            Parser parser = new Parser(function.expression);
+            double derivative = (function.CartPoints[index + 1].Y - function.CartPoints[index].Y) / (function.CartPoints[index + 1].X - function.CartPoints[index].X);
+            double y = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(x)).value);
+            x = Math.Round(x - (y / derivative), 2);
+            if (x == -0)
+            {
+                return "x = " + Convert.ToString(0);
+            }
+            return "x = " + Convert.ToString(x);
+        }
+        public void GetRoots(Function function)
+        {
+            function.roots.Clear();
+            string root;
+            int count = 0;
+            for (int i = 0; i < function.CartPoints.Length - 1; i++)
+            {
+                if (((function.CartPoints[i].Y * function.CartPoints[i + 1].Y < 0) && Math.Abs(function.CartPoints[i].Y) < 1) || function.CartPoints[i].Y == 0)
+                {
+                    for (int j = i - 40; j < i + 40; j++)
+                    {
+                        if (j >= 0 && j < CartPoints.Length)
+                        {
+                            if (Math.Abs(function.CartPoints[j].Y) < 0.005)
+                            {
+                                count++;
+                            }
+                        }
+                    }
+                    if (count < 20 && function.CartPoints[i].Y != 0)
+                    {
+                        root = NewtonRaphson(function, function.CartPoints[i].X, i);
+                        if (!function.roots.Contains(root))
+                        {
+                            function.roots.Add(root);
+                        }
+                    }
+                    if (count < 20 && function.CartPoints[i].Y == 0)
+                    {
+                        root = "x = " + Math.Round(function.CartPoints[i].X, 2);
+                        if (root == "x = -0")
+                        {
+                            root = "x = 0";
+                        }
+                        if (!function.roots.Contains(root))
+                        {
+                            function.roots.Add(root);
+                        }
+                    }
+                }
+            }
+        }
+        private bool CheckAsymptote(List<PointF> points, float MaxY, float MinY)
+        {
+            bool asymptote = false;
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (points[i].Y > MaxY || points[i].Y < MinY)
+                {
+                    asymptote = true;
+                    return asymptote;
+                }
+            }
+            return asymptote;
+        }
+        public void GetMaxPoints(Function function, float MaxY, float MinY)
+        {
+            function.max.Clear();
+            double temp = 0;
+            int index = 0;
+            for (int i = 0; i < function.gradients.Count; i++)
+            {
+                if (function.gradients[i] > 0)
+                {
+                    temp = function.gradients[i];
+                    index = i + 1;
+                }
+                if (function.gradients[i] < 0 && temp > 0)
+                {
+                    double x = Math.Round((function.CartPoints[index].X + function.CartPoints[i + 1].X) / 2, 1);
+                    if (x == -0)
+                    {
+                        x = 0;
+                    }
+                    double y = Math.Round(function.CartPoints[i - 1].Y, 1);
+                    PointF point = new PointF(Convert.ToSingle(x), Convert.ToSingle(y));
+                    if (point.Y == 0)
+                    {
+                        function.roots.Add("x = " + point.X);
+                    }
+                    function.max.Add(point);
+                    temp = 0;
+                    index = 0;
+                }
+            }
+            bool asymptote = CheckAsymptote(function.max, MaxY, MinY);
+            if (asymptote)
+            {
+                function.max.Clear();
+            }
+        }
+        public void GetMinPoints(Function function, float MaxY, float MinY)
+        {
+            function.min.Clear();
+            double temp = 0;
+            int index = 0;
+            for (int i = 0; i < function.gradients.Count; i++)
+            {
+                if (function.gradients[i] < 0)
+                {
+                    temp = function.gradients[i];
+                    index = i + 1;
+                }
+                if (function.gradients[i] > 0 && temp < 0)
+                {
+                    double x = Math.Round((function.CartPoints[index].X + function.CartPoints[i + 1].X) / 2, 1);
+                    if (x == -0)
+                    {
+                        x = 0;
+                    }
+                    double y = Math.Round(function.CartPoints[i - 1].Y, 1);
+                    PointF point = new PointF(Convert.ToSingle(x), Convert.ToSingle(y));
+                    if (point.Y == 0)
+                    {
+                        function.roots.Add("x = " + point.X);
+                    }
+                    function.min.Add(point);
+                    temp = 0;
+                    index = 0;
+                }
+            }
+            bool asymptote = CheckAsymptote(function.min, MaxY, MinY);
+            if (asymptote)
+            {
+                function.min.Clear();
+            }
+        }
+        public void GetGradients(Function function)
+        {
+            function.gradients.Clear();
+            double m;
+            for (int i = 0; i < function.CartPoints.Length - 1; i++)
+            {
+                m = (function.CartPoints[i + 1].Y - function.CartPoints[i].Y) / (function.CartPoints[i + 1].X - function.CartPoints[i].X);
+                if (!double.IsNaN(m) && !double.IsInfinity(m))
+                {
+                    function.gradients.Add(m);
+                }
+            }
+        }
     }
 
 

@@ -38,7 +38,6 @@ namespace GraphicalCalculatorNEA
             }
             writer.Close();
             Graph graph = new();
-            graph.UpdateFunctions();
             graph.FuncCheck();
             return lines;
         }
