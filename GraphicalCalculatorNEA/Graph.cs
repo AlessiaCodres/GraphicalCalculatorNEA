@@ -121,6 +121,7 @@ namespace GraphicalCalculatorNEA
                 }
                 catch
                 {
+                    Parser parser = new Parser(function.expression);
                     MessageBox.Show(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value);
                     slctFunc1.Checked = false;
                     slctFunc2.Checked = false;
@@ -385,7 +386,8 @@ namespace GraphicalCalculatorNEA
                 {
                     for (int i = 0; i < pixPoints.Length - 1; i++)
                     {
-                        if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y))
+                        if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y)
+                            && pixPoints[i].Y > 0 && pixPoints[i].Y > 0)
                         {
                             graphObj.DrawLine(pen, pixPoints[i], pixPoints[i + 1]);
                         }
@@ -412,7 +414,7 @@ namespace GraphicalCalculatorNEA
                     {
                         for (int j = function.min.Count - 1; j < function.min.Count; j++)
                         {
-                            if (function.max[i].X == function.max[j].X)
+                            if (function.max[i].X == function.min[j].X)
                             {
                                 function.min.RemoveAt(i);
                                 function.max.RemoveAt(i);

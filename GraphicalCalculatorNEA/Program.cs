@@ -358,10 +358,11 @@ namespace GraphicalCalculatorNEA
                     Node temp = new Node(null, null, currtok.value);
                     Consume();
                     CheckBracket();
-                    temp.right = Factor();
+                    temp.left = Factor();
+                    temp.right = temp.left;
                     if (error == true)
                     {
-                        node = temp.right;
+                        node = temp.left;
                     }
                     else
                     {
@@ -374,10 +375,11 @@ namespace GraphicalCalculatorNEA
                     Node temp = new Node(null, null, currtok.value);
                     Consume();
                     CheckBracket();
-                    temp.right = Factor();
+                    temp.left = Factor();
+                    temp.right = temp.left;
                     if (error == true)
                     {
-                        node = temp.right;
+                        node = temp.left;
                     }
                     else
                     {
@@ -475,16 +477,16 @@ namespace GraphicalCalculatorNEA
                     node.value = Convert.ToString(Math.Pow(Convert.ToDouble(left), Convert.ToDouble(right)));
                     return node;
                 case "cos":
-                    node.value = Convert.ToString(Math.Cos(Convert.ToDouble(right)));
+                    node.value = Convert.ToString(Math.Cos(Convert.ToDouble(left)));
                     return node;
                 case "sin":
-                    node.value = Convert.ToString(Math.Sin(Convert.ToDouble(right)));
+                    node.value = Convert.ToString(Math.Sin(Convert.ToDouble(left)));
                     return node;
                 case "tan":
-                    node.value = Convert.ToString(Math.Tan(Convert.ToDouble(right)));
+                    node.value = Convert.ToString(Math.Tan(Convert.ToDouble(left)));
                     return node;
                 case "ln":
-                    node.value = Convert.ToString(Math.Log(Convert.ToDouble(right)));
+                    node.value = Convert.ToString(Math.Log(Convert.ToDouble(left)));
                     return node;
             }
             return node;
