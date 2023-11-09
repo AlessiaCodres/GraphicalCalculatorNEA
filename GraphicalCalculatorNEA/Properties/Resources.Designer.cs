@@ -113,6 +113,16 @@ namespace GraphicalCalculatorNEA.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap HelpForm {
+            get {
+                object obj = ResourceManager.GetObject("HelpForm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap mg {
             get {
                 object obj = ResourceManager.GetObject("mg", resourceCulture);

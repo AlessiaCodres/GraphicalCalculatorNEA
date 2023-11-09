@@ -15,6 +15,13 @@ namespace GraphicalCalculatorNEA
         public Help()
         {
             InitializeComponent();
+            MinimumSize = new Size(1216, 758);
+            MaximumSize = new Size(1216, 758);
+        }
+
+        private void Help_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

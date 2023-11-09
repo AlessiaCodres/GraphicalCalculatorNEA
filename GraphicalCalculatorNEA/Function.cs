@@ -19,7 +19,7 @@ namespace GraphicalCalculatorNEA
         public void GetYIntercept(Function function)
         {
             Parser parser = new Parser(function.expression);
-            function.yintercept = Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(0)).value);
+            function.yintercept = Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(0)).value), 2);
         }
         public string NewtonRaphson(Function function, double x, int index)
         {
