@@ -79,7 +79,6 @@ namespace GraphicalCalculatorNEA
                 valid = false;
             }
         }
-
         private void lbSettings_Load(object sender, EventArgs e)
         {
             btCloseS.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -136,7 +135,6 @@ namespace GraphicalCalculatorNEA
                 lbRejectClose.Text = "Cannot close settings if settings invalid.";
             }
         }
-
         private void btHelpS_Click(object sender, EventArgs e)
         {
             Help help = new Help();
@@ -149,31 +147,26 @@ namespace GraphicalCalculatorNEA
                 help.Hide();
             }
         }
-
         private void tbxMinX_TextChanged(object sender, EventArgs e)
         {
             Validation();
             lines[0] = tbxMinX.Text;
         }
-
         private void tbxMaxX_TextChanged(object sender, EventArgs e)
         {
             Validation();
             lines[1] = tbxMaxX.Text;
         }
-
         private void tbxMinY_TextChanged(object sender, EventArgs e)
         {
             Validation();
             lines[2] = tbxMinY.Text;
         }
-
         private void tbxMaxY_TextChanged(object sender, EventArgs e)
         {
             Validation();
             lines[3] = tbxMaxY.Text;
         }
-
         private void rbtRadians_CheckedChanged(object sender, EventArgs e)
         {
             if (rbtRadians.Checked)
@@ -185,7 +178,6 @@ namespace GraphicalCalculatorNEA
                 lines[4] = "Degrees";
             }
         }
-
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (valid == false)
