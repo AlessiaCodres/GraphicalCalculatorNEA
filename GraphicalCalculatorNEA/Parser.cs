@@ -325,7 +325,6 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
-
         private Node Term()
         {
             Node node = Factor();
@@ -346,7 +345,6 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
-
         private Node Factor()
         {
             while (currtok.type == TokenType.Num || currtok.type == TokenType.Var || currtok.type == TokenType.Trig || currtok.type == TokenType.Log

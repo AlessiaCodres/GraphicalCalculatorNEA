@@ -25,27 +25,26 @@ namespace GraphicalCalculatorNEA
 {
     public partial class Graph : Form
     {
-        Function function1 = new Function();
-        Function function2 = new Function();
-        Function function3 = new Function();
-        Function function4 = new Function();
-        Function function5 = new Function();
-        float xoffset;
-        float yoffset;
-        float xorigin;
-        float yorigin;
-        float MinX;
-        float MaxX;
-        float MinY;
-        float MaxY;
-        float xfactor;
-        float yfactor;
-        float xaxisPos = 0;
-        float yaxisPos = 0;
-        Graphics graphObj;
-        Parser parser;
-        string cursor = "default";
-        bool error = false;
+        private Function function1 = new Function();
+        private Function function2 = new Function();
+        private Function function3 = new Function();
+        private Function function4 = new Function();
+        private Function function5 = new Function();
+        private float xoffset;
+        private float yoffset;
+        private float xorigin;
+        private float yorigin;
+        private float MinX;
+        private float MaxX;
+        private float MinY;
+        private float MaxY;
+        private float xfactor;
+        private float yfactor;
+        private float xaxisPos = 0;
+        private float yaxisPos = 0;
+        private Graphics graphObj;
+        private string cursor = "default";
+        private bool error = false;
         public Graph()
         {
             InitializeComponent();
@@ -101,37 +100,29 @@ namespace GraphicalCalculatorNEA
             cart.Y = yorigin - ((y - yoffset) / yfactor);
             return cart;
         }
-        private void GetPointArrays(Function function)
+        private void SetPointArrays(Function function)
         {
             ReadSettings();
             SetOffset();
-            float step = (MaxX - MinX) / 5000;
-            for (int i = 0; i < function.CartPoints.Length; i++)
+            Parser parser = new Parser(function.GetExpression());
+            if (parser.root.value.Length > 5 && parser.root.value.Substring(0,5) == "ERROR")
             {
-                function.CartPoints[i].X = MinX + step * i;
+                slctFunc1.Checked = false;
+                slctFunc2.Checked = false;
+                slctFunc3.Checked = false;
+                slctFunc4.Checked = false;
+                slctFunc5.Checked = false;
+                error = true;
+                MessageBox.Show(parser.root.value);
             }
-            for (int i = 0; i < function.CartPoints.Length; i++)
+            else
             {
-                try
+                function.SetCartPoints(MaxX, MinX);
+                for (int i = 0; i < function.GetCartPoints().Length; i++)
                 {
-                    Parser parser = new Parser(function.expression);
-                    string y = Convert.ToString(Math.Round(Convert.ToDouble(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value), 3));
-                    function.CartPoints[i].Y = (float)Convert.ToDouble(y);
+                    function.GetPixPoints()[i].Y = CartToPix(function.GetCartPoints()[i].X, function.GetCartPoints()[i].Y).Y;
+                    function.GetPixPoints()[i].X = CartToPix(function.GetCartPoints()[i].X, function.GetCartPoints()[i].Y).X;
                 }
-                catch
-                {
-                    Parser parser = new Parser(function.expression);
-                    MessageBox.Show(parser.Evaluate(parser.root, Convert.ToString(function.CartPoints[i].X)).value);
-                    slctFunc1.Checked = false;
-                    slctFunc2.Checked = false;
-                    slctFunc3.Checked = false;
-                    slctFunc4.Checked = false;
-                    slctFunc5.Checked = false;
-                    error = true;
-                    break;
-                }
-                function.PixPoints[i].Y = CartToPix(function.CartPoints[i].X, function.CartPoints[i].Y).Y;
-                function.PixPoints[i].X = CartToPix(function.CartPoints[i].X, function.CartPoints[i].Y).X;
             }
         }
         private void DrawAxes(float xgap, float ygap)
@@ -403,27 +394,13 @@ namespace GraphicalCalculatorNEA
             lb.Items.Clear();
             if (error != true)
             {
-                if (!double.IsInfinity(function.yintercept))
+                if (!double.IsInfinity(function.GetYIntercept()))
                 {
-                    lb.Items.Add("Y-Intercept: " + function.yintercept);
+                    lb.Items.Add("Y-Intercept: " + function.GetYIntercept());
                 }
-                if (function.min.Count > 0 && function.max.Count > 0)
+                if (function.GetMax().Count != 0)
                 {
-                    for (int i = function.max.Count - 1; i < function.max.Count; i++)
-                    {
-                        for (int j = function.min.Count - 1; j < function.min.Count; j++)
-                        {
-                            if (function.max[i].X == function.min[j].X)
-                            {
-                                function.min.RemoveAt(i);
-                                function.max.RemoveAt(i);
-                            }
-                        }
-                    }
-                }
-                if (function.max.Count != 0)
-                {
-                    if (function.max.Count > 20)
+                    if (function.GetMax().Count > 20)
                     {
                         lb.Items.Add("There are too many maximum points to display.");
                     }
@@ -431,15 +408,15 @@ namespace GraphicalCalculatorNEA
                     {
 
                         lb.Items.Add("Maximum Points:");
-                        for (int i = 0; i < function.max.Count; i++)
+                        for (int i = 0; i < function.GetMax().Count; i++)
                         {
-                            lb.Items.Add("(" + function.max[i].X + ", " + function.max[i].Y + ")");
+                            lb.Items.Add("(" + function.GetMax()[i].X + ", " + function.GetMax()[i].Y + ")");
                         }
                     }
                 }
-                if (function.min.Count != 0)
+                if (function.GetMin().Count != 0)
                 {
-                    if (function.min.Count > 20)
+                    if (function.GetMin().Count > 20)
                     {
                         lb.Items.Add("There are too many minimum points to display.");
                     }
@@ -447,22 +424,22 @@ namespace GraphicalCalculatorNEA
                     {
 
                         lb.Items.Add("Minimum Points:");
-                        for (int i = 0; i < function.min.Count; i++)
+                        for (int i = 0; i < function.GetMin().Count; i++)
                         {
-                            lb.Items.Add("(" + function.min[i].X + ", " + function.min[i].Y + ")");
+                            lb.Items.Add("(" + function.GetMin()[i].X + ", " + function.GetMin()[i].Y + ")");
                         }
                     }
                 }
-                if (function.roots.Count > 20)
+                if (function.GetRoots().Count > 20)
                 {
                     lb.Items.Add("There are too many roots to display.");
                 }
-                if (function.roots.Count != 0)
+                if (function.GetRoots().Count != 0)
                 {
                     lb.Items.Add("Roots:");
-                    for (int i = 0; i < function.roots.Count; i++)
+                    for (int i = 0; i < function.GetRoots().Count; i++)
                     {
-                        lb.Items.Add(function.roots[i]);
+                        lb.Items.Add(function.GetRoots()[i]);
                     }
                 }
             }
@@ -490,55 +467,55 @@ namespace GraphicalCalculatorNEA
             SetOffset();
             if (slctFunc1.Checked)
             {
-                function1.expression = txtFunc1.Text;
+                function1.SetExpression(txtFunc1.Text);
                 UpdateFunction(function1);
                 Pen pen = new Pen(Func1Colour.BackColor);
-                DrawGraph(pen, function1.PixPoints);
+                DrawGraph(pen, function1.GetPixPoints());
                 DisplayInfo(lbFunc1Info, function1);
             }
             if (slctFunc2.Checked)
             {
-                function2.expression = txtFunc2.Text;
+                function2.SetExpression(txtFunc2.Text);
                 UpdateFunction(function2);
                 Pen pen = new Pen(Func2Colour.BackColor);
-                DrawGraph(pen, function2.PixPoints);
+                DrawGraph(pen, function2.GetPixPoints());
                 DisplayInfo(lbFunc2Info, function2);
             }
             if (slctFunc3.Checked)
             {
-                function3.expression = txtFunc3.Text;
+                function3.SetExpression(txtFunc3.Text);
                 UpdateFunction(function3);
                 Pen pen = new Pen(Func3Colour.BackColor);
-                DrawGraph(pen, function3.PixPoints);
+                DrawGraph(pen, function3.GetPixPoints());
                 DisplayInfo(lbFunc3Info, function3);
             }
             if (slctFunc4.Checked)
             {
-                function4.expression = txtFunc4.Text;
+                function4.SetExpression(txtFunc4.Text);
                 UpdateFunction(function4);
                 Pen pen = new Pen(Func4Colour.BackColor);
-                DrawGraph(pen, function4.PixPoints);
+                DrawGraph(pen, function4.GetPixPoints());
                 DisplayInfo(lbFunc4Info, function4);
             }
             if (slctFunc5.Checked)
             {
-                function5.expression = txtFunc5.Text;
+                function5.SetExpression(txtFunc5.Text);
                 UpdateFunction(function5);
                 Pen pen = new Pen(Func5Colour.BackColor);
-                DrawGraph(pen, function5.PixPoints);
+                DrawGraph(pen, function5.GetPixPoints());
                 DisplayInfo(lbFunc5Info, function5);
             }
         }
         private void UpdateFunction(Function function)
         {
-            GetPointArrays(function);
+            SetPointArrays(function);
             if (!error)
             {
-                function.GetYIntercept(function);
-                function.GetRoots(function);
-                function.GetGradients(function);
-                function.GetMaxPoints(function, MaxY, MinY);
-                function.GetMinPoints(function, MaxY, MinY);
+                function.FindYIntercept();
+                function.FindRoots();
+                function.FindGradients();
+                function.FindMaxPoints(MaxY, MinY);
+                function.FindMinPoints(MaxY, MinY);
             }
         }
         private void Zoom(float x, float y, float multiplier)
@@ -678,7 +655,7 @@ namespace GraphicalCalculatorNEA
         {
             if (slctFunc1.Checked)
             {
-                function1.expression = txtFunc1.Text;
+                function1.SetExpression(txtFunc1.Text);
                 UpdateFunction(function1);
             }
             FuncCheck();
@@ -687,7 +664,7 @@ namespace GraphicalCalculatorNEA
         {
             if (slctFunc2.Checked)
             {
-                function2.expression = txtFunc2.Text;
+                function2.SetExpression(txtFunc2.Text);
                 UpdateFunction(function2);
             }
             FuncCheck();
@@ -696,7 +673,7 @@ namespace GraphicalCalculatorNEA
         {
             if (slctFunc3.Checked)
             {
-                function3.expression = txtFunc3.Text;
+                function3.SetExpression(txtFunc3.Text);
                 UpdateFunction(function3);
             }
             FuncCheck();
@@ -705,7 +682,7 @@ namespace GraphicalCalculatorNEA
         {
             if (slctFunc4.Checked)
             {
-                function4.expression = txtFunc4.Text;
+                function4.SetExpression(txtFunc4.Text);
                 UpdateFunction(function4);
             }
             FuncCheck();
@@ -714,7 +691,7 @@ namespace GraphicalCalculatorNEA
         {
             if (slctFunc5.Checked)
             {
-                function5.expression = txtFunc5.Text;
+                function5.SetExpression(txtFunc5.Text);
                 UpdateFunction(function5);
             }
             FuncCheck();
@@ -834,23 +811,23 @@ namespace GraphicalCalculatorNEA
                 Point pixPoint = new Point(e.Location.X, e.Location.Y);
                 if (slctFunc1.Checked)
                 {
-                    CheckCoord(function1.PixPoints, function1.CartPoints, pixPoint);
+                    CheckCoord(function1.GetPixPoints(), function1.GetCartPoints(), pixPoint);
                 }
                 if (slctFunc2.Checked)
                 {
-                    CheckCoord(function2.PixPoints, function2.CartPoints, pixPoint);
+                    CheckCoord(function2.GetPixPoints(), function2.GetCartPoints(), pixPoint);
                 }
                 if (slctFunc3.Checked)
                 {
-                    CheckCoord(function3.PixPoints, function3.CartPoints, pixPoint);
+                    CheckCoord(function3.GetPixPoints(), function3.GetCartPoints(), pixPoint);
                 }
                 if (slctFunc4.Checked)
                 {
-                    CheckCoord(function4.PixPoints, function4.CartPoints, pixPoint);
+                    CheckCoord(function4.GetPixPoints(), function4.GetCartPoints(), pixPoint);
                 }
                 if (slctFunc5.Checked)
                 {
-                    CheckCoord(function5.PixPoints, function5.CartPoints, pixPoint);
+                    CheckCoord(function5.GetPixPoints(), function5.GetCartPoints(), pixPoint);
                 }
             }
         }
