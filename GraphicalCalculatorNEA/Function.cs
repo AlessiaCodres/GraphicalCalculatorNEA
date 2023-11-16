@@ -89,7 +89,7 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
-        private bool CheckAsymptote(List<PointF> points, float MaxY, float MinY)
+        private bool CheckAsymptote(List<PointF> points, float MaxY, float MinY, float MaxX, float MinX)
         {
             bool asymptote = false;
             for (int i = 0; i < points.Count; i++)
@@ -99,10 +99,15 @@ namespace GraphicalCalculatorNEA
                     asymptote = true;
                     return asymptote;
                 }
+                if (points[i].X > MaxX || points[i].X < MinX)
+                {
+                    asymptote = true;
+                    return asymptote;
+                }
             }
             return asymptote;
         }
-        public void FindMaxPoints(float MaxY, float MinY)
+        public void FindMaxPoints(float MaxY, float MinY, float MaxX, float MinX)
         {
             max.Clear();
             double temp = 0;
@@ -128,17 +133,17 @@ namespace GraphicalCalculatorNEA
                         roots.Add("x = " + point.X);
                     }
                     max.Add(point);
+                    bool asymptote = CheckAsymptote(max, MaxY, MinY, MaxX, MinX);
+                    if (asymptote)
+                    {
+                        max.Remove(point);
+                    }
                     temp = 0;
                     index = 0;
                 }
             }
-            bool asymptote = CheckAsymptote(max, MaxY, MinY);
-            if (asymptote)
-            {
-                max.Clear();
-            }
         }
-        public void FindMinPoints(float MaxY, float MinY)
+        public void FindMinPoints(float MaxY, float MinY, float MaxX, float MinX)
         {
             min.Clear();
             double temp = 0;
@@ -164,32 +169,16 @@ namespace GraphicalCalculatorNEA
                         roots.Add("x = " + point.X);
                     }
                     min.Add(point);
+                    bool asymptote = CheckAsymptote(min, MaxY, MinY, MaxX, MinX);
+                    if (asymptote)
+                    {
+                        min.Remove(point);
+                    }
                     temp = 0;
                     index = 0;
                 }
             }
-            bool asymptote = CheckAsymptote(min, MaxY, MinY);
-            if (asymptote)
-            {
-                min.Clear();
-            }
-        }
-        public void CompareMaxMin()
-        {
-            if (min.Count > 0 && max.Count > 0)
-            {
-                for (int i = max.Count - 1; i < max.Count; i++)
-                {
-                    for (int j = min.Count - 1; j < min.Count; j++)
-                    {
-                        if (max[i].X == min[j].X)
-                        {
-                            min.RemoveAt(i);
-                            max.RemoveAt(i);
-                        }
-                    }
-                }
-            }
+
         }
         public void FindGradients()
         {
@@ -210,7 +199,6 @@ namespace GraphicalCalculatorNEA
         public PointF[] GetPixPoints() { return PixPoints; }
         public List<PointF> GetMin() { return min; }
         public List<PointF> GetMax() { return max; }
-        public List<double> GetGradients() { return gradients; }
         public PointF[] GetCartPoints() { return CartPoints; }
         public List<string> GetRoots() { return roots; }
     }

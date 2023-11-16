@@ -514,9 +514,8 @@ namespace GraphicalCalculatorNEA
                 function.FindYIntercept();
                 function.FindRoots();
                 function.FindGradients();
-                function.FindMaxPoints(MaxY, MinY);
-                function.FindMinPoints(MaxY, MinY);
-                function.CompareMaxMin();
+                function.FindMaxPoints(MaxY, MinY, MaxX, MinX);
+                function.FindMinPoints(MaxY, MinY, MaxX, MinX);
             }
         }
         private void Zoom(float x, float y, float multiplier)
