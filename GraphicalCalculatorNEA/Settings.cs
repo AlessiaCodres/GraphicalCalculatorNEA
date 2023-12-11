@@ -8,17 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Forms;
+using System.Xml;
 
 namespace GraphicalCalculatorNEA
 {
     public partial class Settings : Form
     {
-        private string[] lines = new string[5];
-        private bool valid = false;
+        private string[] lines = new string[5]; // settings saved locally 
+        private bool valid = false; // stores whether settings valid 
         public Settings()
         {
             InitializeComponent();
         }
+        //settings read from file and saved to lines[]
         private string[] ReadFile()
         {
             StreamReader reader = new StreamReader("Settings.txt");
@@ -29,6 +31,7 @@ namespace GraphicalCalculatorNEA
             reader.Close();
             return lines;
         }
+        //settings written to text file from lines[]
         private string[] WriteFile()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
@@ -41,6 +44,7 @@ namespace GraphicalCalculatorNEA
             graph.FuncCheck();
             return lines;
         }
+        //used to set settings to initial values
         public void InitialiseSettings()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
@@ -51,6 +55,7 @@ namespace GraphicalCalculatorNEA
             writer.WriteLine("Radians");
             writer.Close();
         }
+        //carries out validation to ensure that settings are in the correct range and form
         private void Validation()
         {
             try
@@ -60,7 +65,7 @@ namespace GraphicalCalculatorNEA
                     lbInvalid.Text = "Invalid: Minimum cannot be >= maximum.";
                     valid = false;
                 }
-                if (Convert.ToDouble(tbxMinX.Text) < -100 || Convert.ToDouble(tbxMinY.Text) < -100 || 
+                else if (Convert.ToDouble(tbxMinX.Text) < -100 || Convert.ToDouble(tbxMinY.Text) < -100 || 
                     Convert.ToDouble(tbxMaxX.Text) > 100 || Convert.ToDouble(tbxMaxY.Text) > 100)
                 {
                     lbInvalid.Text = "Invalid: Must be in the range -100 <= Settings <= 100.";
@@ -79,6 +84,7 @@ namespace GraphicalCalculatorNEA
                 valid = false;
             }
         }
+        //When the form opens the settings from the text file can be read and inserted, and the componenets are anchored to ensure correct resizing.
         private void lbSettings_Load(object sender, EventArgs e)
         {
             btCloseS.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
@@ -121,11 +127,11 @@ namespace GraphicalCalculatorNEA
                 rbtRadians.Checked = true;
             }
             Validation();
-
         }
+        //saves the settings to the text file if valid before closing the form, if invalid displays error message
         private void btCloseS_Click(object sender, EventArgs e)
         {
-            if (valid == true)
+            if (valid)
             {
                 WriteFile();
                 Close();
@@ -135,6 +141,7 @@ namespace GraphicalCalculatorNEA
                 lbRejectClose.Text = "Cannot close settings if settings invalid.";
             }
         }
+        //handles connection between help and settings form
         private void btHelpS_Click(object sender, EventArgs e)
         {
             Help help = new Help();
@@ -147,25 +154,38 @@ namespace GraphicalCalculatorNEA
                 help.Hide();
             }
         }
+        //handle when the user changes any settings and saves to lines[] if valid
         private void tbxMinX_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            lines[0] = tbxMinX.Text;
+            if (valid)
+            {
+                lines[0] = tbxMinX.Text;
+            }
         }
         private void tbxMaxX_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            lines[1] = tbxMaxX.Text;
+            if (valid)
+            {
+                lines[1] = tbxMaxX.Text;
+            }
         }
         private void tbxMinY_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            lines[2] = tbxMinY.Text;
+            if (valid)
+            {
+                lines[2] = tbxMinY.Text;
+            }
         }
         private void tbxMaxY_TextChanged(object sender, EventArgs e)
         {
             Validation();
-            lines[3] = tbxMaxY.Text;
+            if (valid)
+            {
+                lines[3] = tbxMaxY.Text;
+            }
         }
         private void rbtRadians_CheckedChanged(object sender, EventArgs e)
         {
@@ -178,6 +198,7 @@ namespace GraphicalCalculatorNEA
                 lines[4] = "Degrees";
             }
         }
+        //handles the case where the form is force closed by the user
         private void Settings_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (valid == false)

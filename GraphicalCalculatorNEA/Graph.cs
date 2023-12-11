@@ -25,38 +25,46 @@ namespace GraphicalCalculatorNEA
 {
     public partial class Graph : Form
     {
+        // Function objects are generated to use for the up to five functions that the user can input at any one time
         private Function function1 = new Function();
         private Function function2 = new Function();
         private Function function3 = new Function();
         private Function function4 = new Function();
         private Function function5 = new Function();
+        // variables for use in the conversion between cartesian and pixel coordinates instantiated
         private float xoffset;
         private float yoffset;
         private float xorigin;
         private float yorigin;
+        private float xfactor;
+        private float yfactor;
+        // variables for view window settings instantiated
         private float MinX;
         private float MaxX;
         private float MinY;
         private float MaxY;
-        private float xfactor;
-        private float yfactor;
         private float xaxisPos = 0;
         private float yaxisPos = 0;
+        // Graphics object for drawing the functions instantiated
         private Graphics graphObj;
+        // the cursor's status is instantiated to default
         private string cursor = "default";
+        // error instantiated to false 
         private bool error = false;
         public Graph()
         {
             InitializeComponent();
-            MinimumSize = new Size(800, 700);
-            if (!File.Exists("Settings.txt"))
+            MinimumSize = new Size(800, 700); // form has a minimum size to prevent from becoming unreadable
+            if (!File.Exists("Settings.txt")) // handles the case where the settings file does not exist
             {
                 Settings settings = new Settings();
-                settings.InitialiseSettings();
+                settings.InitialiseSettings(); 
             }
         }
+        // the cartesian origin (starting point of view window) and pixel offset is set to allow for conversion between cartesian and pixel coordinates
         private void SetOffset()
         {
+            // handles case where no axes present in the view window
             if ((MinX >= 0 && MinY >= 0) || (MinX >= 0 && MaxY <= 0) || (MaxX <= 0 && MaxY <= 0) || (MaxX <= 0 && MinY >= 0))
             {
                 xoffset = 0;
@@ -64,6 +72,7 @@ namespace GraphicalCalculatorNEA
                 xorigin = MinX;
                 yorigin = MaxY;
             }
+            // handles case where both axes are present in the view window
             if (MinX <= 0 && MaxX >= 0 && MinY <= 0 && MaxY >= 0)
             {
                 xoffset = -MinX * xfactor;
@@ -71,6 +80,7 @@ namespace GraphicalCalculatorNEA
                 xorigin = 0;
                 yorigin = 0;
             }
+            // handles case where only the y axis is present in the view window
             if ((MinX >= 0 && MinY <= 0 && MaxY >= 0) || (MaxX <= 0 && MinY <= 0 && MaxY >= 0))
             {
                 xoffset = 0;
@@ -78,6 +88,7 @@ namespace GraphicalCalculatorNEA
                 xorigin = MinX;
                 yorigin = 0;
             }
+            // handles case where only the x axis is present in the view window 
             if ((MinX <= 0 && MaxX >= 0 && MinY >= 0) || (MinX <= 0 && MaxX >= 0 && MaxY <= 0))
             {
                 xoffset = -MinX * xfactor;
@@ -86,6 +97,7 @@ namespace GraphicalCalculatorNEA
                 yorigin = MaxY;
             }
         }
+        // conversion from a cartesian coordiante to a pixel coordinate
         private PointF CartToPix(float x, float y)
         {
             PointF pix = new PointF(0, 0);
@@ -93,6 +105,7 @@ namespace GraphicalCalculatorNEA
             pix.Y = yoffset + ((yorigin - y) * yfactor);
             return pix;
         }
+        // conversion from a pixel coordinate to a cartesian coordinate
         private PointF PixToCart(float x, float y)
         {
             PointF cart = new PointF(0, 0);
@@ -100,11 +113,14 @@ namespace GraphicalCalculatorNEA
             cart.Y = yorigin - ((y - yoffset) / yfactor);
             return cart;
         }
+        // the cartesian and pixel point arrays for a function are set
         private void SetPointArrays(Function function)
         {
             ReadSettings();
             SetOffset();
             Parser parser = new Parser(function.GetExpression());
+            // if there is an error with the expression, the user input must be invalid
+            // the error is presented to the user and all functions unselected to allow user to make necessary changes
             if (parser.root.value.Length > 5 && parser.root.value.Substring(0,5) == "ERROR")
             {
                 slctFunc1.Checked = false;
@@ -115,9 +131,11 @@ namespace GraphicalCalculatorNEA
                 error = true;
                 MessageBox.Show(parser.root.value);
             }
+            // if expression valid, the cartesian point array is set by calling to the Function class
             else
             {
                 function.SetCartPoints(MaxX, MinX);
+                // the pixel point array is set by calling CartToPix() on the cartesian points from the cartesian points array
                 for (int i = 0; i < function.GetCartPoints().Length; i++)
                 {
                     function.GetPixPoints()[i].Y = CartToPix(function.GetCartPoints()[i].X, function.GetCartPoints()[i].Y).Y;
@@ -125,41 +143,52 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
+        // axes are drawn in the picture box, and are labelled with the approapriate numbers 
+        // where axes are not present in view window, their locations are saved as the approapriate edge of the picture box, to allow for 
+        // numbers of axes to still be visible to the user
         private void DrawAxes(float xgap, float ygap)
         {
             Pen blackpen = new Pen(Color.Black, 2);
+            // handles case where y axis present in view window
             if (MinX <= 0 && MaxX >= 0)
             {
                 graphObj.DrawLine(blackpen, -MinX * xfactor, 0, -MinX * xfactor, pbGraph.Height);
                 yaxisPos = -MinX * xfactor;
             }
+            // handles case where y axis not present in view window, but is to the right
             else if (MaxX <= 0)
             {
                 yaxisPos = pbGraph.Width;
             }
+            // handles case where y axis not present in view window, but is to the left
             else if (MinX >= 0)
             {
                 yaxisPos = 0;
             }
+            // handles case where x axis is present in view window
             if (MinY <= 0 && MaxY >= 0)
             {
                 graphObj.DrawLine(blackpen, 0, MaxY * yfactor, pbGraph.Width, MaxY * yfactor);
                 xaxisPos = MaxY * yfactor;
             }
+            // handles case where x axis is not present in view window, but is upwards
             else if (MaxY <= 0)
             {
                 xaxisPos = 0;
             }
+            // handles case where x axis is not rpesent in the view window, but is downwards
             else if (MinY >= 0)
             {
                 xaxisPos = pbGraph.Height;
             }
+            // labels the origin with 0 in the case where both axes are present in the view window
             if (MinX < 0 && MaxX > 0 && MinY < 0 && MaxY > 0)
             {
                 PointF point = new PointF(yaxisPos - 10, xaxisPos);
                 Brush brush = new SolidBrush(Color.Black);
                 graphObj.DrawString("0", new Font("Segoe UI", 8, FontStyle.Regular), brush, point);
             }
+            // labels the positive x axis with numbers 
             for (float i = 5 * xgap; i < MaxX; i = i + 5 * xgap)
             {
                 if (i > MinX)
@@ -181,6 +210,7 @@ namespace GraphicalCalculatorNEA
                     graphObj.DrawString(str, font, brush, rectangle);
                 }
             }
+            // labels the negative x axis with numbers 
             for (float i = -5 * xgap; i > MinX; i = i - 5 * xgap)
             {
                 if (i < MaxX)
@@ -202,6 +232,7 @@ namespace GraphicalCalculatorNEA
                     graphObj.DrawString(str, font, brush, rectangle);
                 }
             }
+            // labels the positive y axis with numbers 
             for (float i = 5 * ygap; i < MaxY; i = i + 5 * ygap)
             {
                 if (i > MinY)
@@ -223,6 +254,7 @@ namespace GraphicalCalculatorNEA
                     graphObj.DrawString(str, font, brush, rectangle);
                 }
             }
+            // labels the negative y axis with numbers 
             for (float i = -5 * ygap; i > MinY; i = i - 5 * ygap)
             {
                 if (i < MaxY)
@@ -245,13 +277,18 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
+        // grid is drawn in the picture box
         private void DrawGrid()
         {
             Pen greypen = new Pen(Color.Lavender, 1);
             Pen bluepen = new Pen(Color.LightBlue, 1);
+            // an approapriate set of increments that would make the grid look sensical
             float[] gaps = new float[] { 0.01f, 0.05f, 0.1f, 0.2f, 0.5f, 1, 2, 5 };
             float xgap = gaps[0];
             int track = 0;
+            // the gaps array is traversed, checking whether the gaps are too small to be readable for the view window settings (if there would be more than 100 gaps)
+            // if view window settings are too big for any predetermined gaps, 5 is added until the gap is of an approapriate size 
+            // this is done for both x and y so that both directions have readable gaps for their respective view window settings 
             while ((MaxX - MinX) / xgap > 100)
             {
                 if (track < 7)
@@ -278,6 +315,8 @@ namespace GraphicalCalculatorNEA
                     ygap += 5;
                 }
             }
+            // the grid is drawn by drawing horizontal and vertical lines with the predetermined gap between them 
+            // every fifth line is drawn in darker colour to make the grid easier to read
             for (float i = 0; i < MaxX; i = i + xgap)
             {
                 if (i > MinX)
@@ -343,8 +382,10 @@ namespace GraphicalCalculatorNEA
                     graphObj.DrawLine(bluepen, 0, y, pbGraph.Width, y);
                 }
             }
+            // axes drawn on top of grid
             DrawAxes(xgap, ygap);
         }
+        // settings saved locally
         private void ReadSettings()
         {
             StreamReader reader = new StreamReader("Settings.txt");
@@ -356,6 +397,7 @@ namespace GraphicalCalculatorNEA
             xfactor = pbGraph.Width / (MaxX - MinX);
             yfactor = pbGraph.Height / (MaxY - MinY);
         }
+        // settings in text file updated
         private void WriteSettings()
         {
             StreamWriter writer = new StreamWriter("Settings.txt");
@@ -367,16 +409,43 @@ namespace GraphicalCalculatorNEA
             xfactor = pbGraph.Width / (MaxX - MinX);
             yfactor = pbGraph.Height / (MaxY - MinY);
         }
+        // the functions are drawn in the picture box
         private void DrawGraph(Pen pen, PointF[] pixPoints)
         {
             if (error != true)
             {
+                // grid and axes drawn first
                 DrawGrid();
                 try
                 {
                     for (int i = 0; i < pixPoints.Length - 1; i++)
                     {
-                        if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y)
+                        if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y))
+                        {
+                            Pen blackpen = new Pen(Color.Black, 1);
+                            for (int j = 0; j < pbGraph.Height - 10; j = j + 15)
+                            {
+                                graphObj.DrawLine(blackpen, pixPoints[i].X, j, pixPoints[i].X, j + 10);
+                            }
+                        }
+                        // handles cases where function grows very steep so that there aren't any gaps in the function on the view window
+                        else if (double.IsPositiveInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y))
+                        {
+                            graphObj.DrawLine(pen, pixPoints[i + 1].X, pixPoints[i + 1].Y, pixPoints[i + 1].X, 0);
+                        }
+                        else if (!double.IsInfinity(pixPoints[i].Y) && double.IsPositiveInfinity(pixPoints[i + 1].Y))
+                        {
+                            graphObj.DrawLine(pen, pixPoints[i].X, pixPoints[i].Y, pixPoints[i].X, 0);
+                        }
+                        else if (double.IsNegativeInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y))
+                        {
+                            graphObj.DrawLine(pen, pixPoints[i + 1].X, pixPoints[i + 1].Y, pixPoints[i + 1].X, 0);
+                        }
+                        else if (!double.IsInfinity(pixPoints[i].Y) && double.IsNegativeInfinity(pixPoints[i + 1].Y))
+                        {
+                            graphObj.DrawLine(pen, pixPoints[i].X, pixPoints[i].Y, pixPoints[i].X, 0);
+                        }
+                        else if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y)
                             && pixPoints[i].Y > 0 && pixPoints[i].Y > 0)
                         {
                             graphObj.DrawLine(pen, pixPoints[i], pixPoints[i + 1]);
@@ -389,12 +458,13 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
+        // geometric information about a function is displayed in a list box in a user friendly way 
         private void DisplayInfo(ListBox lb, Function function)
         {
             lb.Items.Clear();
             if (error != true)
             {
-                if (!double.IsInfinity(function.GetYIntercept()))
+                if (!double.IsInfinity(function.GetYIntercept()) && !double.IsNaN(function.GetYIntercept()))
                 {
                     lb.Items.Add("Y-Intercept: " + function.GetYIntercept());
                 }
@@ -444,6 +514,7 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
+        // it is checked whether a coordiante is close to a fuction (when clicked by the user) and displayed if approapriate
         private void CheckCoord(PointF[] pixPoints, PointF[] cartPoints, Point pixPoint)
         {
             for (int i = 0; i < pixPoints.Length; i++)
@@ -458,6 +529,7 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
+        // processes and displays the functions that are selected and their geometric information
         public void FuncCheck()
         {
             error = false;
@@ -506,6 +578,7 @@ namespace GraphicalCalculatorNEA
                 DisplayInfo(lbFunc5Info, function5);
             }
         }
+        // fucntions are updated by being processed again
         private void UpdateFunction(Function function)
         {
             SetPointArrays(function);
@@ -518,6 +591,8 @@ namespace GraphicalCalculatorNEA
                 function.FindMinPoints(MaxY, MinY, MaxX, MinX);
             }
         }
+        // handles zooming in and out of the graph
+        // this is done by adjusting the view window settings, then calls FuncCheck() to reprocess and redraw the functions
         private void Zoom(float x, float y, float multiplier)
         {
             float[] settings = new float[4];
@@ -549,6 +624,7 @@ namespace GraphicalCalculatorNEA
             WriteSettings();
             FuncCheck();
         }
+        // some form components are anchored to ensure the form can be resized 
         private void Graph_Load(object sender, EventArgs e)
         {
             btHelpG.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
@@ -562,9 +638,11 @@ namespace GraphicalCalculatorNEA
             pbLeft.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
             pbRight.Anchor = (AnchorStyles.Top | AnchorStyles.Right);
             lbCoords.Anchor = (AnchorStyles.Bottom | AnchorStyles.Left);
-
+            // graphics object created
             graphObj = pbGraph.CreateGraphics();
         }
+        // when the graph is resized, some anchored components will automatically handle the resizing, but others must have the bounds set
+        // to ensure they are approapriately placed on the form
         private void Graph_Resize(object sender, EventArgs e)
         {
             int gap = ((ClientRectangle.Height - 65) / 5) - 5;
@@ -613,6 +691,7 @@ namespace GraphicalCalculatorNEA
                 FuncCheck();
             }
         }
+        // closes application when exit pressed
         private void btExitG_Click(object sender, EventArgs e)
         {
             for (int i = 0; i >= 0; i--)
@@ -620,6 +699,7 @@ namespace GraphicalCalculatorNEA
                 Application.OpenForms[i].Close();
             }
         }
+        // handles settings being opened, and unselects all functions to allow for settings to be correctly edited
         private void btSettingsG_Click(object sender, EventArgs e)
         {
             Settings settings = new Settings();
@@ -639,6 +719,7 @@ namespace GraphicalCalculatorNEA
             slctFunc4.Checked = false;
             slctFunc5.Checked = false;
         }
+        // handles opening help form
         private void btHelpG_Click(object sender, EventArgs e)
         {
             Help help = new Help();
@@ -651,6 +732,7 @@ namespace GraphicalCalculatorNEA
                 help.Hide();
             }
         }
+        // when a function is selected, it must be updated, then FuncCheck() called to draw all selected functions
         private void slctFunc1_CheckedChanged(object sender, EventArgs e)
         {
             if (slctFunc1.Checked)
@@ -696,10 +778,12 @@ namespace GraphicalCalculatorNEA
             }
             FuncCheck();
         }
+        // after the form is resized, functions must be redrawn as the size of the picture box will have changed
         private void Graph_ResizeEnd(object sender, EventArgs e)
         {
             FuncCheck();
         }
+        // handles the user selecting the colour each function should be drawn in, and calls FuncCheck() to ensure all functions drawn in selected colour
         private void Func1Colour_Click(object sender, EventArgs e)
         {
             colorDialog1.ShowDialog();
@@ -730,6 +814,7 @@ namespace GraphicalCalculatorNEA
             Func5Colour.BackColor = colorDialog1.Color;
             FuncCheck();
         }
+        // when the user clicks on a cursor button, the cursor symbol must be changed to that and the cursor status saved
         private void pbZoomIn_Click(object sender, EventArgs e)
         {
             Cursor zoomIn = new Cursor("CursorZoomIn.cur");
@@ -747,6 +832,7 @@ namespace GraphicalCalculatorNEA
             Cursor = Cursors.Default;
             cursor = "default";
         }
+        // when a up/down/left/right button is clicked, the view window settings must be updated approapriately and functions redrawn
         private void pbUp_Click(object sender, EventArgs e)
         {
             MinY += Math.Abs((MaxY - MinY) / 10);
@@ -775,28 +861,36 @@ namespace GraphicalCalculatorNEA
             WriteSettings();
             FuncCheck();
         }
+        // when the text of a fucntion changes, the fucntion should be unselected, so that the user can make all changes before it is processed
         private void txtFunc1_TextChanged(object sender, EventArgs e)
         {
             slctFunc1.Checked = false;
+            lbFunc1Info.Items.Clear();
         }
         private void txtFunc2_TextChanged(object sender, EventArgs e)
         {
             slctFunc2.Checked = false;
+            lbFunc2Info.Items.Clear();
         }
         private void txtFunc3_TextChanged(object sender, EventArgs e)
         {
             slctFunc3.Checked = false;
+            lbFunc3Info.Items.Clear();
         }
         private void txtFunc4_TextChanged(object sender, EventArgs e)
         {
             slctFunc4.Checked = false;
+            lbFunc4Info.Items.Clear();
         }
         private void txtFunc5_TextChanged(object sender, EventArgs e)
         {
             slctFunc5.Checked = false;
+            lbFunc5Info.Items.Clear();
         }
+        // when the user clicks on the picturebox, an action is taken depending on the status of the cursor
         private void pbGraph_MouseClick(object sender, MouseEventArgs e)
         {
+            // if the cursor is zoomin or zoomout, Zoom() is called to zoom in/out
             if (cursor == "zoomin")
             {
                 Zoom(pbGraph.PointToClient(MousePosition).X, pbGraph.PointToClient(MousePosition).Y, float.Parse("0.5"));
@@ -805,6 +899,7 @@ namespace GraphicalCalculatorNEA
             {
                 Zoom(pbGraph.PointToClient(MousePosition).X, pbGraph.PointToClient(MousePosition).Y, 2);
             }
+            // if the cursor is default, it must be checked if the user has clicked on a function, and if so the closest coordinate is displayed
             lbCoords.Text = "";
             if (Cursor == Cursors.Default)
             {
@@ -831,6 +926,5 @@ namespace GraphicalCalculatorNEA
                 }
             }
         }
-        
     }
 }

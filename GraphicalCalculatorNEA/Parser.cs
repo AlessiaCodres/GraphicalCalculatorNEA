@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace GraphicalCalculatorNEA
 {
+    // Node class is used to create objects that make up the expression tree 
     class Node
     {
+        // left and right pointers used to connect nodes to their child nodes all the way down the tree
         public Node left = null;
         public Node right = null;
         public string value = "";
@@ -18,6 +20,8 @@ namespace GraphicalCalculatorNEA
             value = Value;
         }
     }
+    // enumerated type TokenType is used to assign a token a category of symbol that can be found in a valid expression
+    // with the addition of an error and the end of the expression being reached
     enum TokenType
     {
         LParen,
@@ -33,6 +37,7 @@ namespace GraphicalCalculatorNEA
         End,
         Error
     }
+    // token class used to divide the expression input by the user into individual units e.g. numbers, variables etc.
     class Token
     {
         public TokenType type;
@@ -44,6 +49,7 @@ namespace GraphicalCalculatorNEA
             value = Value;
         }
     }
+    // lexer class is used to divide the expression into tokens
     class Lexer
     {
         private char currchar;
@@ -60,6 +66,7 @@ namespace GraphicalCalculatorNEA
             CheckBracketPairs();
 
         }
+        // any empty space is removed from the expression
         private string RemoveWhitespace(string input)
         {
             string temp = input;
@@ -73,6 +80,8 @@ namespace GraphicalCalculatorNEA
             }
             return input;
         }
+        // if an expression begins with -, it is replaced with 0-, making it easier to process and evaluate
+        // any double negatives are replaced with a +
         private string Negatives(string input)
         {
             if (input[0] == '-')
@@ -88,6 +97,7 @@ namespace GraphicalCalculatorNEA
             }
             return input;
         }
+        // checks whether all brackets have a pair - if not an error returned
         public void CheckBracketPairs()
         {
             int LCount = 0;
@@ -110,6 +120,7 @@ namespace GraphicalCalculatorNEA
                 currchar = '!';
             }
         }
+        // the next character of the expression is set to be the current character 
         private void Next()
         {
             pos++;
@@ -122,6 +133,8 @@ namespace GraphicalCalculatorNEA
                 currchar = input[pos];
             }
         }
+        // certain characters cannot be at the end of the expression as it would not make sense, this checks whether this has happened and returns an error if that is the case
+        // e.g. *, /, ( etc.
         private void CheckEnd()
         {
             if (pos + 1 == input.Length)
@@ -130,6 +143,7 @@ namespace GraphicalCalculatorNEA
                 currtok.value = "ERROR: Expression unrecognised.";
             }
         }
+        // the next token is obtained by updating the current character and identifying what type of token it is
         public Token GetNextToken()
         {
             while (currchar != '!')
@@ -176,6 +190,7 @@ namespace GraphicalCalculatorNEA
                 {
                     currtok = new Token(TokenType.Error, currchar.ToString());
                 }
+                // handles the cases where an * is omitted e.g. 3x, 3cos(x), 4(x+5) etc.
                 if ((type_ == TokenType.Num || type_ == TokenType.Var || type_ == TokenType.Const || type_ == TokenType.RParen) &&
                     (currtok.type == TokenType.Var || currtok.value == "e" || currtok.type == TokenType.LParen))
                 {
@@ -205,6 +220,7 @@ namespace GraphicalCalculatorNEA
             }
             return currtok;
         }
+        // when a digit is encountered in the expression, the whole number must be treated as one token, GetNumber() handles this
         private Token GetNumber()
         {
             string num = Convert.ToString(currchar);
@@ -233,6 +249,7 @@ namespace GraphicalCalculatorNEA
             }
             return new Token(TokenType.Num, num);
         }
+        // when a letter is encountered in the expression, it must be identified whether it is a single letter or a string as multiple cases are valid e.g. x, sin etc.
         private Token GetWord()
         {
             string word = Convert.ToString(currchar);
@@ -274,8 +291,8 @@ namespace GraphicalCalculatorNEA
             }
             return new Token(TokenType.Error, word);
         }
-
     }
+    // the parser class the lexer to build an expression tree made of nodes from the inputted expression, and evaluate it 
     internal class Parser
     {
         public Node root = new Node(null, null, null);
@@ -287,8 +304,11 @@ namespace GraphicalCalculatorNEA
         {
             lexer = new Lexer(input);
             currtok = lexer.GetNextToken();
-            root = Expression();
+            // Expression() is called to start the recursive process of building the tree
+            // once complete, the tree will be returned by returning the root node, with pointers to the child nodes all the way down
+            root = Expression(); 
         }
+        // brackets are necessary in certain parts of expressions for clarity (e.g. cos(x), e^(3x) etc. ), if not present, an error is returned to the user
         private void CheckBracket()
         {
             if (currtok.type == TokenType.LParen)
@@ -301,10 +321,16 @@ namespace GraphicalCalculatorNEA
                 currtok.type = TokenType.Error;
             }
         }
+        // the next token is fetched from the lexer
         private void Consume()
         {
-            currtok = lexer.GetNextToken();
+            if (!error)
+            {
+                currtok = lexer.GetNextToken();
+            } 
         }
+        // Expression(), Term() and Factor() call each other recursively depending on operator precedence to maintain order of operations in the tree created
+        // the expression is broken down into terms at this point by identifying operators of second precedence + and -
         private Node Expression()
         {
             Node node = Term();
@@ -325,6 +351,7 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
+        // the terms are broken down into factors at this point by identifying operators of first precedence * and /
         private Node Term()
         {
             Node node = Factor();
@@ -345,6 +372,8 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
+        // the factors are broken down into individual units like numbers, functions, variables and constants here
+        // this is done by identifying these as well as any brackets and exponential signs 
         private Node Factor()
         {
             while (currtok.type == TokenType.Num || currtok.type == TokenType.Var || currtok.type == TokenType.Trig || currtok.type == TokenType.Log
@@ -371,7 +400,6 @@ namespace GraphicalCalculatorNEA
                     {
                         node = temp;
                     }
-                    node = temp;
                 }
                 if (currtok.type == TokenType.Log)
                 {
@@ -405,12 +433,14 @@ namespace GraphicalCalculatorNEA
                         node = temp;
                     }
                 }
-                if (currtok.type == TokenType.LParen)
+                // all contents of brackets are treated as one separate expression that is converted to its own tree that can be added in the expression tree where approapriate
+                if (currtok.type == TokenType.LParen) 
                 {
                     Consume();
                     node = Expression();
                     Consume();
                 }
+                // if an error takes place, a single node containing this error is returned
                 if (currtok.type == TokenType.Error)
                 {
                     node = new Node(null, null, currtok.value);
@@ -420,6 +450,8 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
+        // the expression tree is evaluated to produce a corresponding y coordinate to the inputted x coordinate
+        // recursion is used evaluating the tree from the leaf nodes up by calling Evaluate() until the terminal node is reached
         public Node Evaluate(Node node, string x)
         {
             if (error == true)

@@ -15,6 +15,7 @@ namespace GraphicalCalculatorNEA
         public Help()
         {
             InitializeComponent();
+            // help form cannot be resized - remains readable 
             MinimumSize = new Size(1216, 758);
             MaximumSize = new Size(1216, 758);
         }
