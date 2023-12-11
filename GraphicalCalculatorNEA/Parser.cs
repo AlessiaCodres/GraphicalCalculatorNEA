@@ -63,6 +63,7 @@ namespace GraphicalCalculatorNEA
             pos = -1;
             input = RemoveWhitespace(input);
             input = Negatives(input);
+            DoubleOperator(input);
             CheckBracketPairs();
 
         }
@@ -118,6 +119,19 @@ namespace GraphicalCalculatorNEA
                 currtok.value = "ERROR: Bracket pair missing.";
                 currtok.type = TokenType.Error;
                 currchar = '!';
+            }
+        }
+        // checks if there are invalid double operators
+        private void DoubleOperator(string input)
+        {
+            for (int i = 0; i < input.Length - 1; i++)
+            {
+                if ((input[i] == '+' || input[i] == '*' || input[i] == '/') && input[i] == input[i + 1])
+                {
+                    currtok.value = "ERROR: Double Operators not accepted.";
+                    currtok.type = TokenType.Error;
+                    currchar = '!';
+                }
             }
         }
         // the next character of the expression is set to be the current character 
@@ -450,6 +464,25 @@ namespace GraphicalCalculatorNEA
             }
             return node;
         }
+        // converts from radians to degrees if the user has selected degrees in the settings instead of radians 
+        private double GetTrigValue(double value)
+        {
+            StreamReader reader = new StreamReader("Settings.txt");
+            for (int i = 0; i < 4; i++)
+            {
+                reader.ReadLine();
+            }
+            string angletype = reader.ReadLine();
+            reader.Close();
+            if (angletype == "Degrees")
+            {
+                return Convert.ToDouble(value * (Math.PI/180));
+            }
+            else
+            {
+                return value;
+            }
+        }
         // the expression tree is evaluated to produce a corresponding y coordinate to the inputted x coordinate
         // recursion is used evaluating the tree from the leaf nodes up by calling Evaluate() until the terminal node is reached
         public Node Evaluate(Node node, string x)
@@ -512,16 +545,16 @@ namespace GraphicalCalculatorNEA
                     node.value = Convert.ToString(Math.Pow(Convert.ToDouble(left), Convert.ToDouble(right)));
                     return node;
                 case "cos":
-                    node.value = Convert.ToString(Math.Cos(Convert.ToDouble(left)));
+                    node.value = Convert.ToString(Math.Cos(GetTrigValue(Convert.ToDouble(left))));
                     return node;
                 case "sin":
-                    node.value = Convert.ToString(Math.Sin(Convert.ToDouble(left)));
+                    node.value = Convert.ToString(Math.Sin(GetTrigValue(Convert.ToDouble(left))));
                     return node;
                 case "tan":
-                    node.value = Convert.ToString(Math.Tan(Convert.ToDouble(left)));
+                    node.value = Convert.ToString(Math.Tan(GetTrigValue(Convert.ToDouble(left))));
                     return node;
                 case "ln":
-                    node.value = Convert.ToString(Math.Log(Convert.ToDouble(left)));
+                    node.value = Convert.ToString(Math.Log(GetTrigValue(Convert.ToDouble(left))));
                     return node;
             }
             return node;

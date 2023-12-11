@@ -420,7 +420,8 @@ namespace GraphicalCalculatorNEA
                 {
                     for (int i = 0; i < pixPoints.Length - 1; i++)
                     {
-                        if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y))
+                        // draws an asymptote if one is present 
+                        if (double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y))
                         {
                             Pen blackpen = new Pen(Color.Black, 1);
                             for (int j = 0; j < pbGraph.Height - 10; j = j + 15)
@@ -445,6 +446,7 @@ namespace GraphicalCalculatorNEA
                         {
                             graphObj.DrawLine(pen, pixPoints[i].X, pixPoints[i].Y, pixPoints[i].X, 0);
                         }
+                        // draws the function by drawing lines from one pixel coordiante to another where coordinates are valid:
                         else if (!double.IsNaN(pixPoints[i].Y) && !double.IsNaN(pixPoints[i + 1].Y) && !double.IsInfinity(pixPoints[i].Y) && !double.IsInfinity(pixPoints[i + 1].Y)
                             && pixPoints[i].Y > 0 && pixPoints[i].Y > 0)
                         {
